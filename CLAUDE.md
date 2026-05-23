@@ -202,6 +202,7 @@ Ao encerrar cada card, registre em `docs/decisions/ADR-NNN.md`:
 | ADR-004 | Fonte mínima 18px em todo o sistema | Fundação |
 | ADR-005 | Caução fixa R$50,00 + R$10,00/peça calculado no servidor | VS04 |
 | ADR-006 | AuditLog separado para toda operação com PII | VS03 |
+| ADR-007 | `usernameAndPassword` em vez de `email` para login da operadora | VS01 |
 
 *Atualize esta tabela a cada nova decisão tomada durante o desenvolvimento.*
 
