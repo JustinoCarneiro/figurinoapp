@@ -1,4 +1,4 @@
-/* global React, Icon, Badge, LOCACOES, locatario, peca */
+/* global React, Icon, Badge, LOCACOES, locatario, peca, exportXLSX */
 // ============================================================
 // Tela 12 — Relatório: Peças Fora (H7.2) · admin · Direção A
 // Tabela: peça, locatário, saída, previsão, dias de atraso.
@@ -31,6 +31,32 @@ function RelatorioPecasFora({ user, go }) {
   const filtradas = soAtrasadas ? linhas.filter(r => r.atraso > 0) : linhas;
   const nAtrasadas = linhas.filter(r => r.atraso > 0).length;
 
+  function exportarExcel() {
+    const dataStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const dataArq = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+    exportXLSX([
+      {
+        name: 'Peças Fora',
+        data: [
+          ['TJA — Peças Fora do Acervo'],
+          ['Gerado em: ' + dataStr],
+          [],
+          ['Peça', 'Categoria', 'Tamanho', 'Locatário', 'Data Saída', 'Devolução Prevista', 'Situação', 'Dias de Atraso'],
+          ...linhas.map(r => [
+            r.peca.nome,
+            r.peca.categoria,
+            r.peca.tamanho,
+            r.locatario.nome,
+            r.saida,
+            r.previsao,
+            r.atraso > 0 ? 'Atrasada' : 'No prazo',
+            r.atraso > 0 ? r.atraso : '',
+          ]),
+        ],
+      },
+    ], `pecas-fora-tja-${dataArq}.xlsx`);
+  }
+
   return (
     <div className="page">
       <div className="page-inner" style={{ maxWidth: 1040 }}>
@@ -46,6 +72,12 @@ function RelatorioPecasFora({ user, go }) {
               <h1 style={{ margin: 0, fontSize: 'var(--tja-text-2xl)' }}>Peças fora do acervo</h1>
             </div>
           </div>
+          {/* Ações */}
+          <div style={{ display: 'flex', gap: 'var(--tja-space-2)' }}>
+          <button className="btn btn-secondary" onClick={exportarExcel}
+            style={{ fontSize: 'var(--tja-text-sm)' }}>
+            <Icon name="download" size={16} /> Exportar Excel
+          </button>
           {/* Toggle só atrasadas */}
           <button onClick={() => setSoAtrasadas(s => !s)}
             style={{
@@ -60,6 +92,7 @@ function RelatorioPecasFora({ user, go }) {
             {soAtrasadas ? 'Mostrando só atrasadas' : 'Ver só atrasadas'}
             <span style={{ fontSize: 11, fontWeight: 700, padding: '1px 7px', borderRadius: 999, background: soAtrasadas ? 'var(--tja-danger)' : 'var(--tja-bg-muted)', color: soAtrasadas ? '#fff' : 'var(--tja-text-soft)' }}>{nAtrasadas}</span>
           </button>
+          </div>
         </div>
 
         {/* Resumo */}
@@ -88,10 +121,17 @@ function RelatorioPecasFora({ user, go }) {
               {filtradas.map((r, i) => {
                 const atrasada = r.atraso > 0;
                 return (
-                  <tr key={r.locId + r.peca.id} style={{
-                    borderBottom: i < filtradas.length - 1 ? '1px solid var(--tja-border-soft)' : 'none',
-                    background: atrasada ? 'var(--tja-danger-soft)' : 'transparent',
-                  }}>
+                  <tr key={r.locId + r.peca.id}
+                    onClick={() => go('devolucao-caucao')}
+                    style={{
+                      borderBottom: i < filtradas.length - 1 ? '1px solid var(--tja-border-soft)' : 'none',
+                      background: atrasada ? 'var(--tja-danger-soft)' : 'transparent',
+                      cursor: 'pointer',
+                      transition: 'background var(--tja-duration) var(--tja-ease)',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = atrasada ? 'rgba(181,58,58,0.12)' : 'var(--tja-bg-muted)'}
+                    onMouseLeave={e => e.currentTarget.style.background = atrasada ? 'var(--tja-danger-soft)' : 'transparent'}
+                  >
                     <td style={{ padding: 'var(--tja-space-4) var(--tja-space-5)' }}>
                       <div style={{ fontWeight: 600 }}>{r.peca.nome}</div>
                       <div style={{ fontSize: 'var(--tja-text-sm)', color: 'var(--tja-text-soft)' }}>{r.peca.categoria} · Tam. {r.peca.tamanho}</div>

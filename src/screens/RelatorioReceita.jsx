@@ -1,4 +1,4 @@
-/* global React, Icon, BRL, RECEITA_MESES, LOCACOES, VALOR_ALUGUEL */
+/* global React, Icon, BRL, RECEITA_MESES, LOCACOES, VALOR_ALUGUEL, exportXLSX */
 // ============================================================
 // Tela 11 — Relatório: Receita do mês (H7.1) · admin · Direção A
 // APENAS aluguel — caução NUNCA entra. Gráfico de barras + total.
@@ -16,6 +16,41 @@ function RelatorioReceita({ user, go }) {
   // Locações que compõem a receita do mês corrente (pagas)
   const locacoesPagas = LOCACOES.filter(l => l.pagamento);
 
+  function exportarExcel() {
+    const dataStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const dataArq = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+    exportXLSX([
+      {
+        name: 'Receita Mensal',
+        data: [
+          ['TJA — Relatório de Receita de Aluguel'],
+          ['Gerado em: ' + dataStr],
+          ['Nota: valores de aluguel apenas. Caução não é receita.'],
+          [],
+          ['Mês', 'Receita (R$)'],
+          ...meses.map(m => [m.mes, m.valor]),
+          [],
+          ['Média mensal', media],
+          ['Acumulado no ano', totalAno],
+        ],
+      },
+      {
+        name: 'Detalhamento Jun 2026',
+        data: [
+          ['Locatário', 'Nº Peças', 'Pago em', 'Aluguel (R$)'],
+          ...locacoesPagas.map(l => [
+            window.locatario(l.locatarioId).nome,
+            l.pecasIds.length,
+            l.pagamento.em,
+            l.pecasIds.length * VALOR_ALUGUEL,
+          ]),
+          [],
+          ['TOTAL', '', '', locacoesPagas.reduce((s, l) => s + l.pecasIds.length * VALOR_ALUGUEL, 0)],
+        ],
+      },
+    ], `receita-tja-${dataArq}.xlsx`);
+  }
+
   return (
     <div className="page">
       <div className="page-inner" style={{ maxWidth: 980 }}>
@@ -25,10 +60,14 @@ function RelatorioReceita({ user, go }) {
             style={{ minHeight: 40, padding: '0 10px', color: 'var(--tja-text-soft)' }}>
             <Icon name="arrowLeft" size={18} />
           </button>
-          <div>
+          <div style={{ flex: 1 }}>
             <p className="eyebrow" style={{ margin: 0 }}>Relatórios</p>
             <h1 style={{ margin: 0, fontSize: 'var(--tja-text-2xl)' }}>Receita de aluguel</h1>
           </div>
+          <button className="btn btn-secondary" onClick={exportarExcel}
+            style={{ fontSize: 'var(--tja-text-sm)', gap: 8 }}>
+            <Icon name="download" size={16} /> Exportar Excel
+          </button>
         </div>
 
         {/* Nota: caução nunca entra */}

@@ -106,7 +106,7 @@ function Acervo({ user, go }) {
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 'var(--tja-space-5)' }}>
             {pecas.map(p => (
-              <button key={p.id} onClick={() => go('cadastro-peca')}
+              <button key={p.id} onClick={() => { window.__pecaEdit = p; go('cadastro-peca'); }}
                 style={{
                   display: 'flex', flexDirection: 'column', textAlign: 'left', font: 'inherit', cursor: 'pointer',
                   background: 'var(--tja-bg-elevated)', border: '1px solid var(--tja-border)',

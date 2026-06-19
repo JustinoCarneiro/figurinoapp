@@ -11,12 +11,28 @@ const TAM_NUMERO = ['36', '38', '40', '42', '44', '46', '48'];
 const CONSERVACAO = ['Ótimo', 'Bom', 'Regular', 'Frágil'];
 const VALOR_LOCACAO_FIXO = 10; // tabelado — R$ 10,00 por figurino
 
+function getTamanhoModo(tam) {
+  if (!tam || tam === '') return 'letra';
+  if (tam === 'Único') return 'unico';
+  if (['PP', 'P', 'M', 'G', 'GG'].includes(tam)) return 'letra';
+  return 'numero';
+}
+
 function CadastroPeca({ user, go }) {
+  const pecaEdit = window.__pecaEdit || null;
+  const isEdit = !!pecaEdit;
+
   const [form, setForm] = useState({
-    nome: '', categoria: '', tamanhoModo: 'letra', tamanho: '', cor: '', material: '',
-    conservacao: 'Bom', local: '',
+    nome: pecaEdit?.nome || '',
+    categoria: pecaEdit?.categoria || '',
+    tamanhoModo: getTamanhoModo(pecaEdit?.tamanho),
+    tamanho: pecaEdit?.tamanho || '',
+    cor: pecaEdit?.cor || '',
+    material: pecaEdit?.material || '',
+    conservacao: pecaEdit?.conservacao || 'Bom',
+    local: pecaEdit?.local || '',
   });
-  const [foto, setFoto] = useState(null);
+  const [foto, setFoto] = useState(isEdit ? '__existente__' : null);
   const [erros, setErros] = useState({});
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
@@ -41,7 +57,7 @@ function CadastroPeca({ user, go }) {
 
   function salvar() {
     const novosErros = {};
-    if (!foto) novosErros.foto = 'A foto é obrigatória para cadastrar uma peça.';
+    if (!isEdit && !foto) novosErros.foto = 'A foto é obrigatória para cadastrar uma peça.';
     if (!form.nome.trim()) novosErros.nome = 'Dê um nome à peça.';
     if (!form.categoria) novosErros.categoria = 'Escolha uma categoria.';
     if (!form.tamanho) novosErros.tamanho = 'Informe o tamanho.';
@@ -61,16 +77,19 @@ function CadastroPeca({ user, go }) {
               <Icon name="check" size={38} />
             </span>
             <div>
-              <h1 style={{ margin: '0 0 8px' }}>Peça cadastrada!</h1>
+              <h1 style={{ margin: '0 0 8px' }}>{isEdit ? 'Peça atualizada!' : 'Peça cadastrada!'}</h1>
               <p style={{ margin: 0, fontSize: 'var(--tja-text-lg)', color: 'var(--tja-text-soft)' }}>
-                <strong style={{ color: 'var(--tja-text)' }}>{form.nome}</strong> já está disponível no acervo.
+                <strong style={{ color: 'var(--tja-text)' }}>{form.nome}</strong>{' '}
+                {isEdit ? 'foi salva com as novas informações.' : 'já está disponível no acervo.'}
               </p>
             </div>
             <div style={{ display: 'flex', gap: 'var(--tja-space-3)' }}>
-              <button className="btn btn-secondary" onClick={() => { setForm({ nome: '', categoria: '', tamanhoModo: 'letra', tamanho: '', cor: '', material: '', conservacao: 'Bom', local: '' }); setFoto(null); setDone(false); }}>
-                <Icon name="plus" size={17} /> Cadastrar outra
-              </button>
-              <button className="btn btn-primary" onClick={() => go('acervo')}>
+              {!isEdit && (
+                <button className="btn btn-secondary" onClick={() => { window.__pecaEdit = null; setForm({ nome: '', categoria: '', tamanhoModo: 'letra', tamanho: '', cor: '', material: '', conservacao: 'Bom', local: '' }); setFoto(null); setDone(false); }}>
+                  <Icon name="plus" size={17} /> Cadastrar outra
+                </button>
+              )}
+              <button className="btn btn-primary" onClick={() => { window.__pecaEdit = null; go('acervo'); }}>
                 Ver no acervo <Icon name="chevron" size={17} />
               </button>
             </div>
@@ -85,13 +104,13 @@ function CadastroPeca({ user, go }) {
       <div className="page-inner" style={{ maxWidth: 980 }}>
         {/* Cabeçalho */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--tja-space-3)', marginBottom: 'var(--tja-space-6)' }}>
-          <button className="btn btn-ghost" onClick={() => go(user.perfil === 'figurinista' ? 'home' : 'acervo')}
+          <button className="btn btn-ghost" onClick={() => { window.__pecaEdit = null; go('acervo'); }}
             style={{ minHeight: 40, padding: '0 10px', color: 'var(--tja-text-soft)' }}>
             <Icon name="arrowLeft" size={18} />
           </button>
           <div>
             <p className="eyebrow" style={{ margin: 0 }}>Acervo</p>
-            <h1 style={{ margin: 0, fontSize: 'var(--tja-text-2xl)' }}>Cadastrar nova peça</h1>
+            <h1 style={{ margin: 0, fontSize: 'var(--tja-text-2xl)' }}>{isEdit ? `Editar: ${pecaEdit.nome}` : 'Cadastrar nova peça'}</h1>
           </div>
         </div>
 
@@ -103,14 +122,23 @@ function CadastroPeca({ user, go }) {
             </label>
             <label style={{
               display: 'block', borderRadius: 'var(--tja-radius-lg)',
-              border: erros.foto ? '2px dashed var(--tja-danger)' : foto ? '1px solid var(--tja-border)' : '2px dashed var(--tja-border)',
+              border: erros.foto ? '2px dashed var(--tja-danger)' : (foto && foto !== '__existente__') ? '1px solid var(--tja-border)' : foto === '__existente__' ? '1px solid var(--tja-border)' : '2px dashed var(--tja-border)',
               background: 'var(--tja-bg-muted)',
               cursor: 'pointer', overflow: 'hidden', position: 'relative',
-              aspectRatio: foto ? 'auto' : '4 / 5', minHeight: foto ? 'auto' : undefined,
+              aspectRatio: (foto && foto !== '__existente__') ? 'auto' : '4 / 5',
             }}>
               <input type="file" accept="image/*" onChange={onFoto} style={{ display: 'none' }} />
-              {foto && (
+              {foto && foto !== '__existente__' && (
                 <img src={foto} alt="Prévia da peça" style={{ display: 'block', width: '100%', height: 'auto' }} />
+              )}
+              {foto === '__existente__' && (
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10, color: 'var(--tja-text-soft)', padding: 20, textAlign: 'center' }}>
+                  <span style={{ width: 52, height: 52, borderRadius: 'var(--tja-radius-md)', background: 'var(--tja-success-soft)', color: 'var(--tja-success)', display: 'grid', placeItems: 'center', border: '1px solid var(--tja-success)' }}>
+                    <Icon name="check" size={26} />
+                  </span>
+                  <span style={{ fontWeight: 600, fontSize: 'var(--tja-text-sm)', color: 'var(--tja-text)' }}>Foto cadastrada</span>
+                  <span style={{ fontSize: 12 }}>Clique para substituir</span>
+                </div>
               )}
               {!foto && (
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10, color: 'var(--tja-text-soft)', padding: 20, textAlign: 'center' }}>
@@ -121,7 +149,7 @@ function CadastroPeca({ user, go }) {
                   <span style={{ fontSize: 12 }}>Toque para escolher uma imagem da peça</span>
                 </div>
               )}
-              {foto && (
+              {foto && foto !== '__existente__' && (
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '10px 12px', background: 'linear-gradient(transparent, rgba(26,26,46,0.7))', display: 'flex', alignItems: 'center', gap: 8, color: '#fff', fontSize: 'var(--tja-text-sm)', fontWeight: 600 }}>
                   <Icon name="edit" size={15} /> Trocar foto
                 </div>
@@ -259,7 +287,7 @@ function CadastroPeca({ user, go }) {
           <div style={{ flex: 1, fontSize: 'var(--tja-text-sm)', color: 'var(--tja-text-soft)' }}>
             Campos com <span style={{ color: 'var(--tja-danger)' }}>*</span> são obrigatórios.
           </div>
-          <button className="btn btn-ghost" onClick={() => go('acervo')} style={{ color: 'var(--tja-text-soft)' }}>Cancelar</button>
+          <button className="btn btn-ghost" onClick={() => { window.__pecaEdit = null; go('acervo'); }} style={{ color: 'var(--tja-text-soft)' }}>Cancelar</button>
           <button className="btn btn-primary" onClick={salvar} disabled={loading}
             style={{ minHeight: 52, minWidth: 180, fontSize: 'var(--tja-text-base)' }}>
             {loading ? 'Salvando…' : <><Icon name="check" size={17} /> Salvar peça</>}

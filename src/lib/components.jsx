@@ -33,6 +33,8 @@ const ICONS = {
   shield: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
   lock: 'M19 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2zM7 11V7a5 5 0 0 1 10 0v4',
   hanger: 'M12 3a2 2 0 0 0-1 3.7c.6.4 1 .8 1 1.3 0 .6-.4 1-1 1.4L3.5 14a1.6 1.6 0 0 0 .9 3h15.2a1.6 1.6 0 0 0 .9-3L13 9.4',
+  download: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3',
+  table: 'M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18',
 };
 
 function Icon({ name, size = 20, style, className }) {
@@ -126,4 +128,14 @@ function Field({ label, hint, error, children }) {
   );
 }
 
-Object.assign(window, { BRL, Icon, Emblem, Badge, TopBar, Field, STATE_LABELS, STATE_CLASS });
+// ---------- Exportação Excel (SheetJS) ----------
+function exportXLSX(sheets, filename) {
+  const wb = XLSX.utils.book_new();
+  sheets.forEach(({ name, data }) => {
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    XLSX.utils.book_append_sheet(wb, ws, name);
+  });
+  XLSX.writeFile(wb, filename);
+}
+
+Object.assign(window, { BRL, Icon, Emblem, Badge, TopBar, Field, STATE_LABELS, STATE_CLASS, exportXLSX });

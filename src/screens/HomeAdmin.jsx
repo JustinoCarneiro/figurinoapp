@@ -23,7 +23,7 @@ function HomeAdmin({ user, go }) {
       label: 'Locações ativas',
       icon: 'list', value: METRICAS.locacoesAtivas,
       foot: `${METRICAS.atrasadasHoje} com devolução atrasada`,
-      key: null,
+      key: 'relatorio-pecas-fora',
     },
   ];
 

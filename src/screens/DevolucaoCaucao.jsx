@@ -106,7 +106,10 @@ function DevolucaoCaucao({ user, go }) {
               <Icon name="check" size={30} style={{ color: 'var(--tja-success)' }} />
             </span>
             <div><strong style={{ color: 'var(--tja-text)', fontSize: 'var(--tja-text-lg)' }}>Nenhuma devolução pendente.</strong></div>
-            <p style={{ margin: '8px 0 0' }}>Todas as cauções foram decididas.</p>
+            <p style={{ margin: '8px 0 16px' }}>Todas as cauções foram decididas.</p>
+            <button className="btn btn-primary" onClick={() => go('home')}>
+              Voltar ao painel <Icon name="chevron" size={17} />
+            </button>
           </div>
         )}
 

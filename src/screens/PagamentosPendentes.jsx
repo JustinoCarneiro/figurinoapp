@@ -1,4 +1,4 @@
-/* global React, Icon, Badge, BRL, LOCACOES, LOCATARIOS, PECAS, VALOR_ALUGUEL, VALOR_CAUCAO, locatario, peca */
+/* global React, Icon, Badge, BRL, LOCACOES, LOCATARIOS, PECAS, VALOR_ALUGUEL, VALOR_CAUCAO, locatario, peca, exportXLSX */
 // ============================================================
 // Tela 5 — Pagamentos Pendentes (H4.2) · admin · Direção A
 // Lista de locações aguardando pagamento.
@@ -74,6 +74,33 @@ function PagamentosPendentes({ user, go }) {
   const totalAluguel = pendentes.reduce((s, l) => s + l.pecasIds.length * VALOR_ALUGUEL, 0);
   const totalCaucao = pendentes.length * VALOR_CAUCAO;
 
+  function exportarExcel() {
+    const dataStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    const dataArq = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+    exportXLSX([
+      {
+        name: 'Pagamentos Pendentes',
+        data: [
+          ['TJA — Pagamentos Pendentes'],
+          ['Gerado em: ' + dataStr],
+          ['Nota: caução é depósito reembolsável, não é receita.'],
+          [],
+          ['Locação', 'Locatário', 'Nº Peças', 'Devolução Prevista', 'Aluguel (R$)', 'Caução (R$)'],
+          ...pendentes.map(l => [
+            l.id,
+            locatario(l.locatarioId).nome,
+            l.pecasIds.length,
+            l.previsao,
+            l.pecasIds.length * VALOR_ALUGUEL,
+            VALOR_CAUCAO,
+          ]),
+          [],
+          ['', 'TOTAL', '', '', totalAluguel, totalCaucao],
+        ],
+      },
+    ], `pagamentos-pendentes-tja-${dataArq}.xlsx`);
+  }
+
   return (
     <div className="page">
       <div className="page-inner" style={{ maxWidth: 900 }}>
@@ -88,25 +115,31 @@ function PagamentosPendentes({ user, go }) {
             <p className="eyebrow" style={{ margin: 0 }}>Administração</p>
             <h1 style={{ margin: 0, fontSize: 'var(--tja-text-2xl)' }}>Pagamentos pendentes</h1>
           </div>
-          {/* Resumo financeiro no cabeçalho */}
-          {pendentes.length > 0 && (
-            <div style={{
-              display: 'flex', gap: 'var(--tja-space-5)', alignItems: 'center',
-              padding: 'var(--tja-space-3) var(--tja-space-5)',
-              background: 'var(--tja-bg-elevated)', border: '1px solid var(--tja-border)',
-              borderRadius: 'var(--tja-radius-md)',
-            }}>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--tja-text-soft)', fontWeight: 600 }}>Aluguel a receber</div>
-                <div style={{ fontFamily: 'var(--tja-font-display)', fontWeight: 600, fontSize: 'var(--tja-text-xl)', fontVariantNumeric: 'tabular-nums' }}>{BRL(totalAluguel)}</div>
+          {/* Resumo financeiro + exportar */}
+          <div style={{ display: 'flex', gap: 'var(--tja-space-3)', alignItems: 'center' }}>
+            {pendentes.length > 0 && (
+              <div style={{
+                display: 'flex', gap: 'var(--tja-space-5)', alignItems: 'center',
+                padding: 'var(--tja-space-3) var(--tja-space-5)',
+                background: 'var(--tja-bg-elevated)', border: '1px solid var(--tja-border)',
+                borderRadius: 'var(--tja-radius-md)',
+              }}>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--tja-text-soft)', fontWeight: 600 }}>Aluguel a receber</div>
+                  <div style={{ fontFamily: 'var(--tja-font-display)', fontWeight: 600, fontSize: 'var(--tja-text-xl)', fontVariantNumeric: 'tabular-nums' }}>{BRL(totalAluguel)}</div>
+                </div>
+                <div style={{ width: 1, height: 36, background: 'var(--tja-border)' }} />
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--tja-text-soft)', fontWeight: 600 }}>Caução a receber</div>
+                  <div style={{ fontFamily: 'var(--tja-font-display)', fontWeight: 600, fontSize: 'var(--tja-text-xl)', fontVariantNumeric: 'tabular-nums' }}>{BRL(totalCaucao)}</div>
+                </div>
               </div>
-              <div style={{ width: 1, height: 36, background: 'var(--tja-border)' }} />
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--tja-text-soft)', fontWeight: 600 }}>Caução a receber</div>
-                <div style={{ fontFamily: 'var(--tja-font-display)', fontWeight: 600, fontSize: 'var(--tja-text-xl)', fontVariantNumeric: 'tabular-nums' }}>{BRL(totalCaucao)}</div>
-              </div>
-            </div>
-          )}
+            )}
+            <button className="btn btn-secondary" onClick={exportarExcel}
+              style={{ fontSize: 'var(--tja-text-sm)', flexShrink: 0 }}>
+              <Icon name="download" size={16} /> Exportar Excel
+            </button>
+          </div>
         </div>
 
         {/* Aviso: caução não é receita */}
@@ -135,7 +168,10 @@ function PagamentosPendentes({ user, go }) {
               </span>
             </div>
             <strong style={{ color: 'var(--tja-text)' }}>Nenhum pagamento pendente.</strong>
-            <p style={{ margin: '8px 0 0', fontSize: 'var(--tja-text-base)' }}>Todos os pagamentos foram confirmados.</p>
+            <p style={{ margin: '8px 0 16px', fontSize: 'var(--tja-text-base)' }}>Todos os pagamentos foram confirmados.</p>
+            <button className="btn btn-primary" onClick={() => go('home')}>
+              Voltar ao painel <Icon name="chevron" size={17} />
+            </button>
           </div>
         )}
 
