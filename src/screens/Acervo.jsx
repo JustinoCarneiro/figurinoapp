@@ -6,8 +6,8 @@
 // ============================================================
 const { useState, useMemo } = React;
 
-// Placeholder de foto sóbrio (sem ilustração colorida) — slot pra foto real.
 function PecaFoto({ peca }) {
+  const [erro, setErro] = useState(false);
   return (
     <div style={{
       aspectRatio: '4 / 3', width: '100%', position: 'relative',
@@ -15,10 +15,19 @@ function PecaFoto({ peca }) {
       display: 'grid', placeItems: 'center', overflow: 'hidden',
       borderTopLeftRadius: 'var(--tja-radius-lg)', borderTopRightRadius: 'var(--tja-radius-lg)',
     }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, color: 'var(--tja-text-faint)' }}>
-        <Icon name="hanger" size={34} />
-        <span style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600 }}>{peca.categoria}</span>
-      </div>
+      {peca.foto && !erro ? (
+        <img
+          src={peca.foto}
+          alt={peca.nome}
+          onError={() => setErro(true)}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+        />
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, color: 'var(--tja-text-faint)' }}>
+          <Icon name="hanger" size={34} />
+          <span style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600 }}>{peca.categoria}</span>
+        </div>
+      )}
     </div>
   );
 }

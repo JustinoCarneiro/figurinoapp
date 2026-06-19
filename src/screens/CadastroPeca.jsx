@@ -1,4 +1,4 @@
-/* global React, Icon */
+/* global React, Icon, BRL, VALOR_ALUGUEL */
 // ============================================================
 // Tela 9 — Cadastro / Edição de Peça (H2.1/H2.2/H2.3) · Direção A
 // 2 colunas: foto à esquerda, dados à direita. Foto obrigatória em novas.
@@ -9,7 +9,6 @@ const CATEGORIAS = ['Vestido', 'Casaca', 'Capa', 'Saia', 'Colete', 'Terno', 'Cal
 const TAM_LETRA = ['PP', 'P', 'M', 'G', 'GG'];
 const TAM_NUMERO = ['36', '38', '40', '42', '44', '46', '48'];
 const CONSERVACAO = ['Ótimo', 'Bom', 'Regular', 'Frágil'];
-const VALOR_LOCACAO_FIXO = 10; // tabelado — R$ 10,00 por figurino
 
 function getTamanhoModo(tam) {
   if (!tam || tam === '') return 'letra';
@@ -125,20 +124,29 @@ function CadastroPeca({ user, go }) {
               border: erros.foto ? '2px dashed var(--tja-danger)' : (foto && foto !== '__existente__') ? '1px solid var(--tja-border)' : foto === '__existente__' ? '1px solid var(--tja-border)' : '2px dashed var(--tja-border)',
               background: 'var(--tja-bg-muted)',
               cursor: 'pointer', overflow: 'hidden', position: 'relative',
-              aspectRatio: (foto && foto !== '__existente__') ? 'auto' : '4 / 5',
+              aspectRatio: (foto && foto !== '__existente__') ? 'auto' : (foto === '__existente__' && pecaEdit?.foto) ? 'auto' : '4 / 5',
             }}>
               <input type="file" accept="image/*" onChange={onFoto} style={{ display: 'none' }} />
               {foto && foto !== '__existente__' && (
                 <img src={foto} alt="Prévia da peça" style={{ display: 'block', width: '100%', height: 'auto' }} />
               )}
               {foto === '__existente__' && (
-                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10, color: 'var(--tja-text-soft)', padding: 20, textAlign: 'center' }}>
-                  <span style={{ width: 52, height: 52, borderRadius: 'var(--tja-radius-md)', background: 'var(--tja-success-soft)', color: 'var(--tja-success)', display: 'grid', placeItems: 'center', border: '1px solid var(--tja-success)' }}>
-                    <Icon name="check" size={26} />
-                  </span>
-                  <span style={{ fontWeight: 600, fontSize: 'var(--tja-text-sm)', color: 'var(--tja-text)' }}>Foto cadastrada</span>
-                  <span style={{ fontSize: 12 }}>Clique para substituir</span>
-                </div>
+                pecaEdit?.foto ? (
+                  <>
+                    <img src={pecaEdit.foto} alt={pecaEdit.nome} style={{ display: 'block', width: '100%', height: 'auto' }} />
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '10px 12px', background: 'linear-gradient(transparent, rgba(26,26,46,0.7))', display: 'flex', alignItems: 'center', gap: 8, color: '#fff', fontSize: 'var(--tja-text-sm)', fontWeight: 600 }}>
+                      <Icon name="edit" size={15} /> Trocar foto
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10, color: 'var(--tja-text-soft)', padding: 20, textAlign: 'center' }}>
+                    <span style={{ width: 52, height: 52, borderRadius: 'var(--tja-radius-md)', background: 'var(--tja-success-soft)', color: 'var(--tja-success)', display: 'grid', placeItems: 'center', border: '1px solid var(--tja-success)' }}>
+                      <Icon name="check" size={26} />
+                    </span>
+                    <span style={{ fontWeight: 600, fontSize: 'var(--tja-text-sm)', color: 'var(--tja-text)' }}>Foto cadastrada</span>
+                    <span style={{ fontSize: 12 }}>Clique para substituir</span>
+                  </div>
+                )
               )}
               {!foto && (
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10, color: 'var(--tja-text-soft)', padding: 20, textAlign: 'center' }}>
@@ -267,7 +275,7 @@ function CadastroPeca({ user, go }) {
                 <label>Valor da locação</label>
                 <div className="input-icon">
                   <Icon name="coin" size={17} />
-                  <input className="input tnum" value="R$ 10,00" disabled readOnly
+                  <input className="input tnum" value={BRL(VALOR_ALUGUEL)} disabled readOnly
                     style={{ background: 'var(--tja-bg-muted)', color: 'var(--tja-text-soft)', cursor: 'not-allowed' }} />
                 </div>
                 <div className="hint">Valor tabelado — fixo para todo novo figurino.</div>

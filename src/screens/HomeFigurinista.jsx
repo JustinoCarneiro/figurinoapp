@@ -113,10 +113,19 @@ function HomeFigurinista({ user, go }) {
         </div>
 
         {/* Atalho secundário */}
-        <div style={{ textAlign: 'center', marginTop: 'var(--tja-space-6)' }}>
-          <button className="link-btn" onClick={() => go('acervo')}
-            style={{ fontSize: 'var(--tja-text-base)' }}>
-            <Icon name="search" size={17} /> Procurar uma peça no acervo
+        <div style={{ marginTop: 'var(--tja-space-6)', display: 'flex', justifyContent: 'center' }}>
+          <button onClick={() => go('acervo')} style={{
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            padding: '12px 20px', font: 'inherit', cursor: 'pointer',
+            background: 'var(--tja-bg-elevated)', border: '1px solid var(--tja-border)',
+            borderRadius: 'var(--tja-radius-md)', fontSize: 'var(--tja-text-sm)',
+            fontWeight: 600, color: 'var(--tja-text)',
+            transition: 'border-color var(--tja-duration) var(--tja-ease)',
+          }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--tja-primary)'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--tja-border)'}>
+            <Icon name="search" size={17} style={{ color: 'var(--tja-primary)' }} />
+            Ver o acervo completo
           </button>
         </div>
       </div>

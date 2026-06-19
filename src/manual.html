@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia do Protótipo — Figurinos TJA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Tokens ── */
+    :root {
+      --indigo:      #3A2D8F;
+      --indigo-soft: #E2DEEF;
+      --navy:        #1A1A2E;
+      --cream:       #F5F4F0;
+      --cream-dark:  #E4E2D9;
+      --white:       #FFFFFF;
+      --text:        #1A1A2E;
+      --soft:        #4A4A5E;
+      --faint:       #8A8A9E;
+      --border:      #DCD9D0;
+      --success:     #2E7D5C;
+      --warning:     #B8860B;
+      --danger:      #B53A3A;
+      --serif: 'Source Serif 4', Georgia, serif;
+      --sans:  'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: #2a2a3e;
+      color: var(--text);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* ── Slide container ── */
+    .slide {
+      width: 297mm;
+      min-height: 210mm;
+      background: var(--cream);
+      margin: 12mm auto;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    }
+
+    /* ── Slide types ── */
+    .slide-cover   { background: var(--navy); color: var(--white); }
+    .slide-section { background: var(--indigo); color: var(--white); }
+    .slide-light   { background: var(--cream); }
+
+    /* ── Slide structure ── */
+    .s-head {
+      padding: 10mm 14mm 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .s-eyebrow {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; opacity: 0.55;
+    }
+    .s-body {
+      flex: 1;
+      padding: 6mm 14mm 10mm;
+      display: flex;
+      gap: 10mm;
+    }
+    .s-col { flex: 1; display: flex; flex-direction: column; gap: 5mm; }
+    .s-col-narrow { flex: 0 0 88mm; display: flex; flex-direction: column; gap: 5mm; }
+
+    /* ── Typography ── */
+    .t-title {
+      font-family: var(--serif);
+      font-size: 28pt;
+      line-height: 1.15;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .t-h2 {
+      font-family: var(--serif);
+      font-size: 18pt;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .t-h3 {
+      font-family: var(--serif);
+      font-size: 13pt;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+    .t-body {
+      font-size: 9.5pt;
+      line-height: 1.6;
+      color: var(--soft);
+    }
+    .t-small {
+      font-size: 8pt;
+      color: var(--faint);
+    }
+    .t-white { color: var(--white); }
+    .t-white-soft { color: rgba(255,255,255,0.65); }
+    .t-indigo { color: var(--indigo); }
+
+    /* ── Bullets ── */
+    ul.bullets { list-style: none; display: flex; flex-direction: column; gap: 3.5mm; }
+    ul.bullets li {
+      display: flex; gap: 7px; align-items: flex-start;
+      font-size: 9.5pt; line-height: 1.5; color: var(--soft);
+    }
+    ul.bullets li::before {
+      content: ''; flex: none;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--indigo); margin-top: 5px;
+    }
+    ul.bullets.white li { color: rgba(255,255,255,0.8); }
+    ul.bullets.white li::before { background: rgba(255,255,255,0.5); }
+
+    /* ── Chips ── */
+    .chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 2px 9px; border-radius: 999px;
+      font-size: 7.5pt; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .chip-indigo { background: var(--indigo-soft); color: var(--indigo); }
+    .chip-success { background: #DDEEE5; color: var(--success); }
+    .chip-warning { background: #F5ECCC; color: var(--warning); }
+    .chip-danger  { background: #F2DCDC; color: var(--danger); }
+    .chip-navy  { background: rgba(255,255,255,0.15); color: var(--white); }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--border); }
+    .divider-white { height: 1px; background: rgba(255,255,255,0.15); }
+
+    /* ── Page number ── */
+    .s-page {
+      position: absolute; bottom: 7mm; right: 12mm;
+      font-size: 7.5pt; color: var(--faint); font-weight: 600;
+    }
+    .s-page.white { color: rgba(255,255,255,0.35); }
+
+    /* ── Logo ── */
+    .tja-logo {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .tja-logo .box {
+      width: 28px; height: 28px; border-radius: 5px;
+      background: var(--indigo); display: grid; place-items: center;
+      font-family: var(--serif); font-weight: 600; font-size: 10px;
+      color: var(--white); letter-spacing: 0.5px;
+    }
+    .tja-logo.white .box { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); }
+    .tja-logo .name { font-weight: 600; font-size: 9.5pt; }
+    .tja-logo .sub { font-size: 7pt; color: var(--faint); letter-spacing: 0.04em; text-transform: uppercase; }
+
+    /* ── Screen mockups ── */
+    .mock {
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      overflow: hidden;
+      background: var(--cream);
+      box-shadow: 0 2px 8px rgba(26,26,46,0.08);
+    }
+    .mock-bar {
+      height: 22px; background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 5px; padding: 0 8px;
+    }
+    .mock-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .mock-body { padding: 7px; display: flex; flex-direction: column; gap: 5px; }
+    .mock-topbar {
+      height: 18px; background: var(--white);
+      border-bottom: 1px solid var(--border);
+      border-radius: 4px; margin-bottom: 5px;
+      display: flex; align-items: center; padding: 0 6px;
+      font-size: 6pt; font-weight: 700; color: var(--indigo);
+    }
+    .mock-block {
+      border-radius: 4px; display: flex; align-items: center;
+      justify-content: center; font-size: 6.5pt; font-weight: 600;
+      color: rgba(255,255,255,0.9);
+    }
+    .mock-row {
+      border-radius: 3px; background: var(--white);
+      border: 1px solid var(--border);
+      height: 18px; display: flex; align-items: center;
+      padding: 0 6px; font-size: 5.5pt; color: var(--soft);
+      gap: 6px;
+    }
+    .mock-card {
+      background: var(--white); border-radius: 4px;
+      border: 1px solid var(--border);
+      padding: 5px 6px;
+    }
+
+    /* ── State diagram ── */
+    .state-flow {
+      display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+    }
+    .state-box {
+      padding: 5px 10px; border-radius: 5px;
+      font-size: 8pt; font-weight: 600; text-align: center;
+      white-space: nowrap;
+    }
+    .state-arrow {
+      font-size: 12pt; color: var(--faint); padding: 0 4px; flex: none;
+    }
+
+    /* ── Table ── */
+    .t-table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+    .t-table th {
+      background: var(--indigo); color: var(--white);
+      padding: 4px 8px; font-weight: 600; text-align: left;
+      font-size: 7.5pt; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .t-table td { padding: 5px 8px; border-bottom: 1px solid var(--border); }
+    .t-table tr:last-child td { border-bottom: none; }
+    .t-table tr:nth-child(even) td { background: rgba(0,0,0,0.025); }
+
+    /* ── Info box ── */
+    .info-box {
+      padding: 7px 10px; border-radius: 5px;
+      font-size: 8.5pt; line-height: 1.5;
+    }
+    .info-box.blue { background: #DDE2EC; border-left: 3px solid var(--indigo); color: var(--text); }
+    .info-box.green { background: #DDEEE5; border-left: 3px solid var(--success); color: var(--text); }
+    .info-box.amber { background: #F5ECCC; border-left: 3px solid var(--warning); color: var(--text); }
+    .info-box.red { background: #F2DCDC; border-left: 3px solid var(--danger); color: var(--text); }
+
+    /* ── Flow step ── */
+    .flow-step {
+      display: flex; gap: 8px; align-items: flex-start;
+    }
+    .step-n {
+      width: 22px; height: 22px; border-radius: 50%; flex: none;
+      background: var(--indigo); color: var(--white);
+      display: grid; place-items: center;
+      font-size: 8pt; font-weight: 700;
+    }
+    .step-body { flex: 1; }
+    .step-title { font-weight: 700; font-size: 9pt; color: var(--text); }
+    .step-desc { font-size: 8pt; color: var(--soft); margin-top: 1px; }
+
+    /* ── Print ── */
+    @media print {
+      body { background: white; }
+      .slide { margin: 0; box-shadow: none; width: 100%; min-height: 100vh; page-break-after: always; }
+      .slide:last-child { page-break-after: auto; }
+      @page { size: A4 landscape; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SLIDE 01 — CAPA -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="slide slide-cover">
+  <!-- Decoração geométrica -->
+  <div style="position:absolute;right:0;top:0;width:88mm;height:210mm;background:rgba(255,255,255,0.04);clip-path:polygon(40% 0,100% 0,100% 100%,0 100%)"></div>
+  <div style="position:absolute;right:0;top:0;width:60mm;height:210mm;background:rgba(255,255,255,0.03);clip-path:polygon(60% 0,100% 0,100% 100%,20% 100%)"></div>
+
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:14mm 16mm;">
+
+    <!-- Topo: logo -->
+    <div class="tja-logo white">
+      <div class="box">TJA</div>
+      <div>
+        <div class="name t-white">Figurinos TJA</div>
+        <div class="sub" style="color:rgba(255,255,255,0.45)">Theatro José de Alencar · SECULT-CE</div>
+      </div>
+    </div>
+
+    <!-- Centro: título -->
+    <div>
+      <div style="display:inline-block;padding:3px 12px;background:rgba(255,255,255,0.1);border-radius:4px;font-size:8pt;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:600;margin-bottom:16px;">
+        Protótipo de Layout · MVP
+      </div>
+      <div class="t-title t-white" style="font-size:36pt;max-width:200mm;margin-bottom:12px;">
+        Guia do<br>Protótipo
+      </div>
+      <div class="t-body t-white-soft" style="font-size:11pt;max-width:170mm;line-height:1.6;">
+        Documento de referência para a revisão e aprovação do layout<br>
+        do Sistema de Gestão de Figurinos do Theatro José de Alencar.
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+      <div>
+        <div style="font-size:8pt;color:rgba(255,255,255,0.4);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">Versão</div>
+        <div style="font-size:9.5pt;color:rgba(255,255,255,0.7);">Fase 2b · Junho 2026</div>
+      </div>
+      <div style="text-align:right;font-size:8pt;color:rgba(255,255,255,0.3);">
+        12 telas · 2 perfis de usuário<br>Fortaleza · Ceará
+      </div>
+    </div>
+  </div>
+  <div class="s-page white">01</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SLIDE 02 — O QUE É ESTE PROTÓTIPO -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="slide slide-light">
+  <div class="s-head">
+    <div class="tja-logo">
+      <div class="box" style="background:var(--indigo);color:#fff;font-family:var(--serif);font-weight:600;font-size:10px;display:grid;place-items:center;">TJA</div>
+    </div>
+    <div class="s-eyebrow" style="color:var(--soft)">Figurinos TJA · Guia do Protótipo</div>
+  </div>
+
+  <div class="s-body">
+    <div class="s-col">
+      <div class="t-h2" style="color:var(--indigo);">O que é este protótipo?</div>
+      <div class="t-body">
+        Um protótipo navegável de alta fidelidade com todas as 12 telas do sistema, criado para
+        <strong style="color:var(--text)">validar o layout e o fluxo</strong> antes do desenvolvimento do backend.
+      </div>
+      <div class="divider"></div>
+      <div class="t-h3">O que está funcionando</div>
+      <ul class="bullets">
+        <li>Toda a navegação entre telas é clicável</li>
+        <li>Formulários com validação em tempo real (CPF, campos obrigatórios)</li>
+        <li>Dados de demonstração realistas</li>
+        <li>Modais de confirmação com fluxo completo</li>
+        <li>Exportação de Excel nas telas da administração</li>
+        <li>Estado salvo no browser — refresh não perde a tela</li>
+      </ul>
+      <div class="divider"></div>
+      <div class="t-h3">O que NÃO está neste protótipo</div>
+      <ul class="bullets">
+        <li>Banco de dados real — os dados somem ao fechar o guia</li>
+        <li>Autenticação de verdade — qualquer senha funciona</li>
+        <li>Fotos reais das peças — placeholders coloridos por enquanto</li>
+      </ul>
+    </div>
+
+    <div class="s-col-narrow">
+      <div class="t-h3" style="margin-bottom:2mm;">Estrutura geral</div>
+
+      <!-- mini organograma -->
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:6px;">
+        <div style="background:var(--indigo);color:#fff;border-radius:4px;padding:5px 8px;font-size:8pt;font-weight:700;text-align:center;">Sistema Figurinos TJA</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+          <div style="background:#E2DEEF;border-radius:4px;padding:5px 7px;font-size:7.5pt;font-weight:700;color:var(--indigo);text-align:center;">👗 Figurinista<br><span style="font-weight:400;color:var(--soft)">Conceição Dantas</span></div>
+          <div style="background:#E2DEEF;border-radius:4px;padding:5px 7px;font-size:7.5pt;font-weight:700;color:var(--indigo);text-align:center;">📋 Administração<br><span style="font-weight:400;color:var(--soft)">Raimundo Filho</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:2px;">
+          <div style="background:var(--cream-dark);border-radius:3px;padding:4px 5px;font-size:6.5pt;font-weight:600;color:var(--soft);text-align:center;">Acervo</div>
+          <div style="background:var(--cream-dark);border-radius:3px;padding:4px 5px;font-size:6.5pt;font-weight:600;color:var(--soft);text-align:center;">Locação</div>
+          <div style="background:var(--cream-dark);border-radius:3px;padding:4px 5px;font-size:6.5pt;font-weight:600;color:var(--soft);text-align:center;">Devolução</div>
+          <div style="background:var(--cream-dark);border-radius:3px;padding:4px 5px;font-size:6.5pt;font-weight:600;color:var(--soft);text-align:center;">Pagamento</div>
+          <div style="background:var(--cream-dark);border-radius:3px;padding:4px 5px;font-size:6.5pt;font-weight:600;color:var(--soft);text-align:center;">Caução</div>
+          <div style="background:var(--cream-dark);border-radius:3px;padding:4px 5px;font-size:6.5pt;font-weight:600;color:var(--soft);text-align:center;">Relatórios</div>
+        </div>
+      </div>
+
+      <div class="info-box blue" style="margin-top:2mm;">
+        <strong>Como aprovar:</strong> navegue por todas as telas e sinalize o que deve mudar no visual ou no fluxo. Não avalie os dados — eles são fictícios.
+      </div>
+
+      <div style="margin-top:2mm;">
+        <div class="t-small" style="font-weight:700;margin-bottom:4px;color:var(--soft);">ACESSO AO PROTÓTIPO</div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:5px;padding:7px 10px;font-size:8.5pt;">
+          <div style="font-weight:700;color:var(--indigo);margin-bottom:4px;">🔗 figurinos-tja-proto.vercel.app</div>
+          <div style="color:var(--soft);display:flex;flex-direction:column;gap:2px;">
+            <div><code style="background:var(--cream-dark);padding:1px 5px;border-radius:3px;font-size:8pt;">conceicao</code> → Figurinista</div>
+            <div><code style="background:var(--cream-dark);padding:1px 5px;border-radius:3px;font-size:8pt;">raimundo</code> → Administração</div>
+            <div style="font-size:7.5pt;margin-top:2px;">Senha: qualquer combinação</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="s-page">02</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SLIDE 03 — LOGIN + HOME FIGURINISTA -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="slide slide-light">
+  <div class="s-head">
+    <div class="s-eyebrow" style="color:var(--soft)">Telas 01–02 · Acesso e Home</div>
+  </div>
+
+  <div class="s-body" style="gap:7mm;">
+
+    <!-- Login -->
+    <div class="s-col">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:1mm;">
+        <span class="chip chip-indigo">Tela 01</span>
+        <span class="t-h3">Login</span>
+        <span class="chip" style="background:var(--cream-dark);color:var(--soft);">Ambos</span>
+      </div>
+      <div class="t-body">Ponto de entrada único do sistema. Layout em duas colunas: identidade institucional à esquerda, formulário à direita.</div>
+
+      <!-- Mock Login -->
+      <div class="mock" style="flex:1;">
+        <div class="mock-bar">
+          <div class="mock-dot" style="background:#ff5f57;"></div>
+          <div class="mock-dot" style="background:#febc2e;"></div>
+          <div class="mock-dot" style="background:#28c840;"></div>
+        </div>
+        <div style="display:flex;height:85px;">
+          <div style="flex:1;background:var(--navy);display:flex;flex-direction:column;justify-content:center;padding:8px;gap:4px;">
+            <div style="width:60%;height:8px;background:rgba(255,255,255,0.2);border-radius:2px;"></div>
+            <div style="width:80%;height:14px;background:rgba(255,255,255,0.15);border-radius:2px;"></div>
+            <div style="width:70%;height:8px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:4px;"></div>
+          </div>
+          <div style="flex:1;background:var(--white);padding:8px;display:flex;flex-direction:column;gap:4px;justify-content:center;">
+            <div style="width:60%;height:8px;background:var(--cream-dark);border-radius:2px;"></div>
+            <div style="height:12px;border:1px solid var(--border);border-radius:3px;"></div>
+            <div style="height:12px;border:1px solid var(--border);border-radius:3px;"></div>
+            <div style="height:14px;background:var(--indigo);border-radius:3px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="bullets" style="margin-top:1mm;">
+        <li>Coluna esquerda: identidade TJA (cor institucional)</li>
+        <li>Coluna direita: campos usuário + senha</li>
+        <li>Mensagem de erro visível ao errar credenciais</li>
+        <li>Dica de acesso para demonstração inclusa</li>
+      </ul>
+    </div>
+
+    <div style="width:1px;background:var(--border);"></div>
+
+    <!-- Home Figurinista -->
+    <div class="s-col">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:1mm;">
+        <span class="chip chip-indigo">Tela 02</span>
+        <span class="t-h3">Home da Figurinista</span>
+        <span class="chip chip-success">Figurinista</span>
+      </div>
+      <div class="t-body">Painel de ação simples com as 3 operações mais comuns. Sem jargão técnico — botões grandes e descrições claras.</div>
+
+      <!-- Mock Home Figurinista -->
+      <div class="mock" style="flex:1;">
+        <div class="mock-bar">
+          <div class="mock-dot" style="background:#ff5f57;"></div>
+          <div class="mock-dot" style="background:#febc2e;"></div>
+          <div class="mock-dot" style="background:#28c840;"></div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-topbar">Figurinos TJA &nbsp;·&nbsp; Conceição Dantas</div>
+          <div style="height:10px;width:40%;background:var(--cream-dark);border-radius:2px;margin-bottom:2px;"></div>
+          <div style="height:6px;width:30%;background:var(--cream-dark);border-radius:2px;margin-bottom:5px;opacity:0.6;"></div>
+          <!-- alerta -->
+          <div style="height:14px;background:#F5ECCC;border:1px solid #B8860B;border-radius:3px;margin-bottom:4px;display:flex;align-items:center;padding:0 5px;">
+            <div style="font-size:5pt;color:#B8860B;font-weight:700;">⚠ 1 locação atrasada</div>
+          </div>
+          <!-- 3 cards -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;">
+            <div style="background:var(--white);border:1.5px solid var(--indigo);border-radius:4px;padding:5px;height:46px;">
+              <div style="width:12px;height:12px;background:var(--indigo);border-radius:2px;margin-bottom:3px;"></div>
+              <div style="font-size:5.5pt;font-weight:700;color:var(--text);">Registrar saída</div>
+              <div style="font-size:4.5pt;color:var(--soft);margin-top:1px;">Emprestar peças</div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:4px;padding:5px;height:46px;">
+              <div style="width:12px;height:12px;background:var(--indigo-soft);border-radius:2px;margin-bottom:3px;"></div>
+              <div style="font-size:5.5pt;font-weight:700;color:var(--text);">Registrar devolução</div>
+              <div style="font-size:4.5pt;color:var(--soft);margin-top:1px;">Conferir peças</div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:4px;padding:5px;height:46px;">
+              <div style="width:12px;height:12px;background:var(--indigo-soft);border-radius:2px;margin-bottom:3px;"></div>
+              <div style="font-size:5.5pt;font-weight:700;color:var(--text);">Cadastrar peça</div>
+              <div style="font-size:4.5pt;color:var(--soft);margin-top:1px;">Adicionar ao acervo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="bullets" style="margin-top:1mm;">
+        <li>Alerta laranja visível quando há locações atrasadas (clicável)</li>
+        <li>3 cards de ação — "Registrar saída" em destaque primário</li>
+        <li>Botão discreto para ver o acervo completo</li>
+        <li>Zero jargão técnico — UX pautada pela figurinista</li>
+      </ul>
+    </div>
+  </div>
+  <div class="s-page">03</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SLIDE 04 — HOME ADMIN -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="slide slide-light">
+  <div class="s-head">
+    <div class="s-eyebrow" style="color:var(--soft)">Tela 03 · Acesso e Home</div>
+  </div>
+
+  <div class="s-body">
+    <div class="s-col">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2mm;">
+        <span class="chip chip-indigo">Tela 03</span>
+        <span class="t-h2">Home da Administração</span>
+        <span class="chip chip-warning">Admin</span>
+      </div>
+      <div class="t-body" style="margin-bottom:3mm;">
+        Painel denso com visão completa do estado do sistema. Métricas, filas de trabalho e atalhos rápidos numa tela só.
+      </div>
+
+      <div class="t-h3" style="margin-bottom:2mm;">Blocos da tela</div>
+
+      <table class="t-table">
+        <thead><tr><th>Bloco</th><th>O que mostra</th><th>Ação</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>3 Métricas</strong></td>
+            <td>Receita do mês, Peças fora, Locações ativas</td>
+            <td>Clique navega ao relatório correspondente</td>
+          </tr>
+          <tr>
+            <td><strong>Pagamentos</strong></td>
+            <td>Locações aguardando pagamento com valores separados</td>
+            <td>"Confirmar" abre tela de pagamentos</td>
+          </tr>
+          <tr>
+            <td><strong>Devoluções</strong></td>
+            <td>Devoluções conferidas aguardando decisão de caução</td>
+            <td>"Analisar" abre tela de caução</td>
+          </tr>
+          <tr>
+            <td><strong>4 Atalhos</strong></td>
+            <td>Acervo, Receita, Peças fora, Locatários</td>
+            <td>Navegação direta</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="s-col-narrow">
+      <!-- Mock Home Admin -->
+      <div class="mock">
+        <div class="mock-bar">
+          <div class="mock-dot" style="background:#ff5f57;"></div>
+          <div class="mock-dot" style="background:#febc2e;"></div>
+          <div class="mock-dot" style="background:#28c840;"></div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-topbar">Figurinos TJA &nbsp;·&nbsp; Administração &nbsp;·&nbsp; Raimundo Filho</div>
+          <!-- Métricas -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:4px;">
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:4px;">
+              <div style="font-size:4.5pt;color:var(--soft);">Receita Jun</div>
+              <div style="font-size:8pt;font-weight:700;color:var(--indigo);">R$ 1.015</div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:4px;">
+              <div style="font-size:4.5pt;color:var(--soft);">Peças fora</div>
+              <div style="font-size:8pt;font-weight:700;color:var(--indigo);">3</div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:4px;">
+              <div style="font-size:4.5pt;color:var(--soft);">Loc. ativas</div>
+              <div style="font-size:8pt;font-weight:700;color:var(--indigo);">2</div>
+            </div>
+          </div>
+          <!-- Filas -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:4px;">
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:4px;">
+              <div style="font-size:5pt;font-weight:700;color:var(--text);margin-bottom:3px;">💰 Pagamentos (2)</div>
+              <div class="mock-row" style="height:14px;font-size:4.5pt;">Cia. Pavilhão · R$120</div>
+              <div class="mock-row" style="height:14px;font-size:4.5pt;margin-top:2px;">Mariana Q. · R$85</div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:4px;">
+              <div style="font-size:5pt;font-weight:700;color:var(--text);margin-bottom:3px;">📦 Devoluções (2)</div>
+              <div class="mock-row" style="height:14px;font-size:4.5pt;">Bando Solar · OK</div>
+              <div class="mock-row" style="height:14px;font-size:4.5pt;margin-top:2px;border-color:#B53A3A;color:#B53A3A;">Pavilhão · ⚠ avaria</div>
+            </div>
+          </div>
+          <!-- Atalhos -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px;">
+            <div style="background:var(--cream-dark);border-radius:3px;padding:4px;font-size:4.5pt;font-weight:600;text-align:center;color:var(--soft);">Acervo</div>
+            <div style="background:var(--cream-dark);border-radius:3px;padding:4px;font-size:4.5pt;font-weight:600;text-align:center;color:var(--soft);">Receita</div>
+            <div style="background:var(--cream-dark);border-radius:3px;padding:4px;font-size:4.5pt;font-weight:600;text-align:center;color:var(--soft);">Peças fora</div>
+            <div style="background:var(--cream-dark);border-radius:3px;padding:4px;font-size:4.5pt;font-weight:600;text-align:center;color:var(--soft);">Locatários</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box green" style="margin-top:3mm;">
+        <strong>Ponto de atenção:</strong> Aluguel e caução aparecem <em>sempre separados</em> — nunca somados. Esta é uma regra de negócio crítica do TJA.
+      </div>
+    </div>
+  </div>
+  <div class="s-page">04</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SLIDE 05 — NOVA LOCAÇÃO -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="slide slide-light">
+  <div class="s-head">
+    <div class="s-eyebrow" style="color:var(--soft)">Tela 04 · Fluxo de Locação</div>
+  </div>
+  <div class="s-body">
+    <div class="s-col">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2mm;">
+        <span class="chip chip-indigo">Tela 04</span>
+        <span class="t-h2">Nova Locação</span>
+        <span class="chip chip-success">Figurinista</span>
+      </div>
+      <div class="t-body" style="margin-bottom:4mm;">
+        Wizard em 3 passos guiados. A figurinista registra a saída das peças; a administração confirma o pagamento depois.
+      </div>
+
+      <div class="t-h3" style="margin-bottom:3mm;">3 passos do wizard</div>
+      <div style="display:flex;flex-direction:column;gap:4mm;">
+        <div class="flow-step">
+          <div class="step-n">1</div>
+          <div class="step-body">
+            <div class="step-title">Figurinos</div>
+            <div class="step-desc">Seleciona peças disponíveis. Busca por nome, categoria ou cor. Filtro por categoria. Checkbox visual em cada linha.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-n">2</div>
+          <div class="step-body">
+            <div class="step-title">Locatário</div>
+            <div class="step-desc">Busca e seleciona o locatário cadastrado. Botão para cadastrar novo locatário sem sair do fluxo.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-n">3</div>
+          <div class="step-body">
+            <div class="step-title">Confirmar</div>
+            <div class="step-desc">Define data de devolução (obrigatório). Resumo completo da locação. Botão "Concluir locação".</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="s-col-narrow">
+      <!-- Mock wizard -->
+      <div class="mock">
+        <div class="mock-bar">
+          <div class="mock-dot" style="background:#ff5f57;"></div>
+          <div class="mock-dot" style="background:#febc2e;"></div>
+          <div class="mock-dot" style="background:#28c840;"></div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-topbar">← Nova locação — Registrar saída de peças</div>
+          <!-- StepBar -->
+          <div style="display:flex;align-items:center;gap:3px;margin-bottom:5px;">
+            <div style="width:16px;height:16px;background:var(--indigo);border-radius:50%;display:grid;place-items:center;font-size:5pt;color:#fff;font-weight:700;flex:none;">1</div>
+            <span style="font-size:5pt;font-weight:700;color:var(--indigo);">Figurinos</span>
+            <div style="flex:1;height:1px;background:var(--border);"></div>
+            <div style="width:16px;height:16px;background:var(--cream-dark);border-radius:50%;display:grid;place-items:center;font-size:5pt;color:var(--soft);font-weight:700;flex:none;">2</div>
+            <span style="font-size:5pt;color:var(--soft);">Locatário</span>
+            <div style="flex:1;height:1px;background:var(--border);"></div>
+            <div style="width:16px;height:16px;background:var(--cream-dark);border-radius:50%;display:grid;place-items:center;font-size:5pt;color:var(--soft);font-weight:700;flex:none;">3</div>
+            <span style="font-size:5pt;color:var(--soft);">Confirmar</span>
+          </div>
+          <!-- Peças list -->
+          <div class="mock-row" style="border-color:var(--indigo);background:var(--indigo-soft);font-size:5pt;">
+            <div style="width:8px;height:8px;background:var(--indigo);border-radius:2px;display:grid;place-items:center;font-size:4pt;color:#fff;">✓</div>
+            <div style="width:16px;height:16px;background:var(--cream-dark);border-radius:2px;"></div>
+            Vestido Belle Époque · Tam. M · Marfim
+          </div>
+          <div class="mock-row" style="font-size:5pt;">
+            <div style="width:8px;height:8px;border:1.5px solid var(--border);border-radius:2px;flex:none;"></div>
+            <div style="width:16px;height:16px;background:var(--cream-dark);border-radius:2px;"></div>
+            Colete Vitoriano · Tam. M · Cinza
+          </div>
+          <div class="mock-row" style="font-size:5pt;">
+            <div style="width:8px;height:8px;border:1.5px solid var(--border);border-radius:2px;flex:none;"></div>
+            <div style="width:16px;height:16px;background:var(--cream-dark);border-radius:2px;"></div>
+            Vestido Esmeralda · Tam. G · Verde
+          </div>
+          <!-- Footer -->
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:4px 6px;display:flex;justify-content:space-between;align-items:center;margin-top:3px;">
+            <div style="display:flex;gap:10px;">
+              <div>
+                <div style="font-size:4pt;text-transform:uppercase;color:var(--soft);letter-spacing:0.06em;">Aluguel</div>
+                <div style="font-size:6.5pt;font-weight:700;">R$ 35,00</div>
+              </div>
+              <div style="width:1px;background:var(--border);"></div>
+              <div>
+                <div style="font-size:4pt;text-transform:uppercase;color:var(--soft);letter-spacing:0.06em;">Caução</div>
+                <div style="font-size:6.5pt;font-weight:700;">R$ 50,00</div>
+              </div>
+            </div>
+            <div style="background:var(--indigo);color:#fff;border-radius:3px;padding:3px 8px;font-size:5.5pt;font-weight:700;">Avançar →</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box amber" style="margin-top:3mm;">
+        <strong>Footer persistente:</strong> aluguel e caução ficam visíveis em todos os 3 passos, sempre separados. A figurinista vê o total que o locatário vai pagar em qualquer momento.
+      </div>
+    </div>
+  </div>
+  <div class="s-page">05</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SLIDE 06 — PAGAMENTOS PENDENTES -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="slide slide-light">
+  <div class="s-head">
+    <div class="s-eyebrow" style="color:var(--soft)">Tela 05 · Fluxo de Locação</div>
+  </div>
+  <div class="s-body">
+    <div class="s-col">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2mm;">
+        <span class="chip chip-indigo">Tela 05</span>
+        <span class="t-h2">Pagamentos Pendentes</span>
+        <span class="chip chip-warning">Admin</span>
+      </div>
+      <div class="t-body" style="margin-bottom:3mm;">
+        Lista todas as locações aguardando confirmação de pagamento. O admin confirma apenas quando recebe o dinheiro fisicamente.
+      </div>
+
+      <div class="divider" style="margin-bottom:3mm;"></div>
+
+      <div class="t-h3" style="margin-bottom:2mm;">Funcionalidades</div>
+      <ul class="bullets">
+        <li>Cards expansíveis — clique para ver detalhes do locatário e peças</li>
+        <li>Cabeçalho mostra total de aluguel e total de caução <em>separados</em></li>
+        <li>Aviso azul lembra que caução <strong>não é receita</strong></li>
+        <li>Modal de confirmação exibe breakdown aluguel ÷ caução antes de confirmar</li>
+        <li>Card confirmado desaparece da lista com animação</li>
+        <li>Estado vazio com botão "Voltar ao painel" quando tudo confirmado</li>
+        <li>Exportação em Excel com totais por coluna</li>
+      </ul>
+    </div>
+
+    <div class="s-col-narrow">
+      <!-- Mock pagamentos -->
+      <div class="mock">
+        <div class="mock-bar">
+          <div class="mock-dot" style="background:#ff5f57;"></div>
+          <div class="mock-dot" style="background:#febc2e;"></div>
+          <div class="mock-dot" style="background:#28c840;"></div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-topbar">← Pagamentos pendentes &nbsp;&nbsp;&nbsp; Aluguel: R$70 | Caução: R$100 &nbsp; [Exportar Excel]</div>
+          <!-- Aviso -->
+          <div style="background:#DDE2EC;border-radius:3px;padding:3px 6px;font-size:5pt;color:var(--text);margin-bottom:3px;">
+            ℹ Atenção: a caução é depósito reembolsável — não é receita.
+          </div>
+          <!-- Card 1 expandido -->
+          <div style="background:var(--white);border:1.5px solid var(--indigo);border-radius:4px;margin-bottom:3px;overflow:hidden;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 6px;">
+              <div style="font-size:6pt;font-weight:700;">Cia. Pavilhão da Magnólia</div>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <span style="font-size:5.5pt;font-weight:700;">R$70</span>
+                <span style="background:#F5ECCC;color:#B8860B;font-size:4.5pt;font-weight:700;padding:1px 4px;border-radius:3px;">AGUARDANDO PGT</span>
+              </div>
+            </div>
+            <div style="border-top:1px solid var(--border);padding:5px 6px;background:var(--cream);">
+              <div style="font-size:4.5pt;color:var(--soft);margin-bottom:3px;">2 peças · Devolução 23/06</div>
+              <div style="background:var(--cream-dark);border-radius:3px;padding:3px 5px;font-size:4.5pt;">Aluguel (2×R$35): R$70 &nbsp;|&nbsp; Caução: R$50</div>
+              <div style="display:flex;justify-content:flex-end;margin-top:3px;">
+                <div style="background:#2E7D5C;color:#fff;border-radius:3px;padding:2px 7px;font-size:5pt;font-weight:700;">✓ Confirmar pagamento</div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 fechado -->
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:4px;display:flex;justify-content:space-between;align-items:center;padding:5px 6px;">
+            <div style="font-size:6pt;font-weight:700;">Mariana Qutinho</div>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span style="font-size:5.5pt;font-weight:700;">R$35</span>
+              <span style="background:#F5ECCC;color:#B8860B;font-size:4.5pt;font-weight:700;padding:1px 4px;border-radius:3px;">AGUARDANDO PGT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="s-page">06</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SLIDE 07 — DEVOLUÇÃO -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="slide slide-light">
+  <div class="s-head">
+    <div class="s-eyebrow" style="color:var(--soft)">Telas 06–07 · Fluxo de Devolução</div>
+  </div>
+  <div class="s-body" style="gap:7mm;">
+
+    <!-- Registrar Devolução -->
+    <div class="s-col">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:1mm;">
+        <span class="chip chip-indigo">Tela 06</span>
+        <span class="t-h3">Registrar Devolução</span>
+        <span class="chip chip-success">Figurinista</span>
+      </div>
+      <div class="t-body" style="margin-bottom:3mm;">A figurinista confere fisicamente cada peça que volta. Dois estágios: buscar a locação → avaliar cada peça.</div>
+
+      <ul class="bullets">
+        <li><strong>Etapa A</strong> — busca a locação pelo nome do locatário ou nome da peça</li>
+        <li><strong>Etapa B</strong> — para cada peça, escolhe uma avaliação:</li>
+      </ul>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin:3mm 0;">
+        <div style="background:#DDEEE5;border:1.5px solid var(--success);border-radius:5px;padding:6px 8px;">
+          <div style="font-size:7.5pt;font-weight:700;color:var(--success);">✓ Devolvida OK</div>
+          <div style="font-size:7pt;color:var(--soft);margin-top:2px;">Voltou em bom estado</div>
+        </div>
+        <div style="background:#F5ECCC;border:1.5px solid var(--warning);border-radius:5px;padding:6px 8px;">
+          <div style="font-size:7.5pt;font-weight:700;color:var(--warning);">⚠ Danificada</div>
+          <div style="font-size:7pt;color:var(--soft);margin-top:2px;">Voltou com avaria</div>
+        </div>
+        <div style="background:#F2DCDC;border:1.5px solid var(--danger);border-radius:5px;padding:6px 8px;">
+          <div style="font-size:7.5pt;font-weight:700;color:var(--danger);">✕ Não devolvida</div>
+          <div style="font-size:7pt;color:var(--soft);margin-top:2px;">Peça não retornou</div>
+        </div>
+      </div>
+      <ul class="bullets">
+        <li>Campo de observação aparece para descrever avarias</li>
+        <li>Footer informa quantas peças foram avaliadas</li>
+        <li>"Enviar para administração" encaminha a decisão de caução</li>
+      </ul>
+    </div>
+
+    <div style="width:1px;background:var(--border);"></div>
+
+    <!-- Devolução Caução -->
+    <div class="s-col">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:1mm;">
+        <span class="chip chip-indigo">Tela 07</span>
+        <span class="t-h3">Devolução de Caução</span>
+        <span class="chip chip-warning">Admin</span>
+      </div>
+      <div class="t-body" style="margin-bottom:3mm;">A administração vê as devoluções conferidas pela figurinista e decide o destino da caução.</div>
+
+      <div class="info-box amber" style="margin-bottom:3mm;">
+        <strong>Princípio do sistema:</strong> o sistema <em>sugere</em>, mas quem decide é sempre um humano. O sistema nunca retém ou devolve caução automaticamente.
+      </div>
+
+      <ul class="bullets">
+        <li>Card de devolução mostra avaliação da figurinista por peça</li>
+        <li>Sistema exibe sugestão: "devolver integral" (tudo OK) ou "há problemas — avalie"</li>
+        <li><strong>Devolver caução integral</strong> — 1 clique + confirmação</li>
+        <li><strong>Reter caução</strong> — abre modal exigindo motivo escrito (obrigatório)</li>
+        <li>Motivo fica registrado na locação para auditoria</li>
+        <li>Card processado fica opaco e desaparece após 1,2 segundos</li>
+      </ul>
+    </div>
+  </div>
+  <div class="s-page">07</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SLIDE 08 — ACERVO + CADASTRO DE PEÇA -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="slide slide-light">
+  <div class="s-head">
+    <div class="s-eyebrow" style="color:var(--soft)">Telas 08–09 · Cadastros</div>
+  </div>
+  <div class="s-body" style="gap:7mm;">
+
+    <!-- Acervo -->
+    <div class="s-col">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:1mm;">
+        <span class="chip chip-indigo">Tela 08</span>
+        <span class="t-h3">Acervo</span>
+        <span class="chip" style="background:var(--cream-dark);color:var(--soft);">Ambos</span>
+      </div>
+      <div class="t-body" style="margin-bottom:2mm;">Galeria de todas as peças do acervo. Busca e filtros em tempo real.</div>
+
+      <!-- Mock Acervo -->
+      <div class="mock" style="flex:1;">
+        <div class="mock-bar">
+          <div class="mock-dot" style="background:#ff5f57;"></div>
+          <div class="mock-dot" style="background:#febc2e;"></div>
+          <div class="mock-dot" style="background:#28c840;"></div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-topbar">← Acervo — Peças do acervo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+ Cadastrar nova peça]</div>
+          <!-- Busca + filtros -->
+          <div style="display:flex;gap:3px;margin-bottom:4px;">
+            <div style="flex:1;height:14px;border:1px solid var(--border);border-radius:3px;background:var(--white);padding:0 5px;display:flex;align-items:center;font-size:4.5pt;color:var(--faint);">🔍 Buscar...</div>
+            <div style="height:14px;background:var(--indigo);border-radius:3px;padding:0 5px;display:flex;align-items:center;font-size:4.5pt;color:#fff;font-weight:700;">Todos 10</div>
+            <div style="height:14px;background:var(--white);border:1px solid var(--border);border-radius:3px;padding:0 5px;display:flex;align-items:center;font-size:4.5pt;color:var(--soft);">Disponível 5</div>
+            <div style="height:14px;background:var(--white);border:1px solid var(--border);border-radius:3px;padding:0 5px;display:flex;align-items:center;font-size:4.5pt;color:var(--soft);">Em uso</div>
+          </div>
+          <!-- Grid de peças -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;">
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:4px;overflow:hidden;">
+              <div style="height:28px;background:#e8e0ce;display:flex;align-items:center;justify-content:center;font-size:4pt;color:#5c4a2a;font-weight:700;">Vestido Belle Époque</div>
+              <div style="padding:3px 4px;">
+                <div style="font-size:5pt;font-weight:700;">Vestido Belle Époque</div>
+                <div style="font-size:4pt;color:var(--soft);">Tam. M · Marfim</div>
+                <div style="background:#DDEEE5;color:#2E7D5C;border-radius:2px;font-size:3.5pt;font-weight:700;padding:1px 4px;margin-top:2px;display:inline-block;">Disponível</div>
+              </div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:4px;overflow:hidden;">
+              <div style="height:28px;background:#7a1e2e;display:flex;align-items:center;justify-content:center;font-size:4pt;color:#fce8ec;font-weight:700;">Casaca Bordô</div>
+              <div style="padding:3px 4px;">
+                <div style="font-size:5pt;font-weight:700;">Casaca de Veludo Bordô</div>
+                <div style="font-size:4pt;color:var(--soft);">Tam. G · Bordô</div>
+                <div style="background:#E2DEEF;color:#3A2D8F;border-radius:2px;font-size:3.5pt;font-weight:700;padding:1px 4px;margin-top:2px;display:inline-block;">Em uso</div>
+              </div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:4px;overflow:hidden;">
+              <div style="height:28px;background:#1a6b3c;display:flex;align-items:center;justify-content:center;font-size:4pt;color:#e8f5ee;font-weight:700;">Vestido Esmeralda</div>
+              <div style="padding:3px 4px;">
+                <div style="font-size:5pt;font-weight:700;">Vestido de Baile Esmeralda</div>
+                <div style="font-size:4pt;color:var(--soft);">Tam. G · Verde</div>
+                <div style="background:#DDEEE5;color:#2E7D5C;border-radius:2px;font-size:3.5pt;font-weight:700;padding:1px 4px;margin-top:2px;display:inline-block;">Disponível</div>
+              </div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:4px;overflow:hidden;opacity:0.6;">
+              <div style="height:28px;background:#c0392b;display:flex;align-items:center;justify-content:center;font-size:4pt;color:#fff;font-weight:700;">Saia de Cancan</div>
+              <div style="padding:3px 4px;">
+                <div style="font-size:5pt;font-weight:700;">Saia de Cancan</div>
+                <div style="font-size:4pt;color:var(--soft);">Tam. P · Vermelho</div>
+                <div style="background:var(--indigo-soft);color:var(--indigo);border-radius:2px;font-size:3.5pt;font-weight:700;padding:1px 4px;margin-top:2px;display:inline-block;">Manutenção</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="bullets" style="margin-top:2mm;">
+        <li>Grid responsivo — clique na peça abre edição</li>
+        <li>Foto: placeholder colorido na cor da peça (foto real no sistema final)</li>
+        <li>Badge de estado em cada card (disponível / em uso / manutenção)</li>
+      </ul>
+    </div>
+
+    <div style="width:1px;background:var(--border);"></div>
+
+    <!-- Cadastro de Peça -->
+    <div class="s-col">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:1mm;">
+        <span class="chip chip-indigo">Tela 09</span>
+        <span class="t-h3">Cadastro de Peça</span>
+        <span class="chip" style="background:var(--cream-dark);color:var(--soft);">Ambos</span>
+      </div>
+      <div class="t-body" style="margin-bottom:2mm;">Formulário em 2 colunas: foto à esquerda, dados à direita. Mesma tela serve para criar e editar.</div>
+
+      <ul class="bullets">
+        <li>Foto obrigatória para novas peças — opcional ao editar</li>
+        <li>Em modo edição: foto existente aparece com overlay "Trocar foto"</li>
+        <li>3 modos de tamanho: Por letra (PP–GG) / Por número (36–48) / Único</li>
+        <li>Estado de conservação: Ótimo / Bom / Regular / Frágil</li>
+        <li>Localização no acervo: campo texto livre</li>
+        <li>Valor da locação <strong>fixo</strong> (R$ 35,00) — campo bloqueado</li>
+        <li>Footer fixo com "Salvar peça" / "Cancelar"</li>
+      </ul>
+
+      <div class="info-box blue" style="margin-top:2mm;">
+        <strong>Modo edição:</strong> ao clicar em qualquer peça no Acervo, o formulário abre pré-preenchido com os dados dela. O título muda para "Editar: [Nome da Peça]".
+      </div>
+    </div>
+  </div>
+  <div class="s-page">08</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SLIDE 09 — CADASTRO LOCATÁRIO + RELATÓRIOS -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="slide slide-light">
+  <div class="s-head">
+    <div class="s-eyebrow" style="color:var(--soft)">Telas 10–12 · Cadastros e Relatórios</div>
+  </div>
+  <div class="s-body" style="gap:6mm;">
+
+    <!-- Cadastro Locatário -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:4mm;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="chip chip-indigo">Tela 10</span>
+        <span class="t-h3">Cadastro de Locatário</span>
+        <span class="chip" style="background:var(--cream-dark);color:var(--soft);">Ambos</span>
+      </div>
+      <div class="t-body">Formulário com CPF validado, máscara de telefone e detecção de duplicidade.</div>
+      <ul class="bullets">
+        <li>CPF com validação dos dígitos verificadores em tempo real</li>
+        <li>Se CPF já cadastrado: aviso antes de salvar</li>
+        <li>Telefone: máscara automática (9 ou 10 dígitos)</li>
+        <li>E-mail opcional com validação de formato</li>
+        <li>Pode ser acessado no meio de uma locação sem perder o fluxo</li>
+      </ul>
+    </div>
+
+    <div style="width:1px;background:var(--border);"></div>
+
+    <!-- Relatório Receita -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:4mm;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="chip chip-indigo">Tela 11</span>
+        <span class="t-h3">Relatório: Receita</span>
+        <span class="chip chip-warning">Admin</span>
+      </div>
+      <div class="t-body">Receita de aluguel — caução <strong>nunca</strong> entra.</div>
+
+      <!-- Mock gráfico mini -->
+      <div class="mock" style="flex:1;">
+        <div class="mock-body" style="padding:6px;">
+          <div style="display:flex;align-items:flex-end;gap:4px;height:40px;padding:0 2px;">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+              <div style="font-size:3pt;color:var(--soft);">980</div>
+              <div style="flex:1;width:100%;background:var(--indigo-soft);border-radius:1px 1px 0 0;height:62%;"></div>
+              <div style="font-size:3pt;color:var(--soft);">Jan</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+              <div style="font-size:3pt;color:var(--soft);">1120</div>
+              <div style="flex:1;width:100%;background:var(--indigo-soft);border-radius:1px 1px 0 0;height:72%;"></div>
+              <div style="font-size:3pt;color:var(--soft);">Fev</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+              <div style="font-size:3pt;color:var(--soft);">1435</div>
+              <div style="flex:1;width:100%;background:var(--indigo-soft);border-radius:1px 1px 0 0;height:92%;"></div>
+              <div style="font-size:3pt;color:var(--soft);">Mar</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+              <div style="font-size:3pt;color:var(--soft);">1260</div>
+              <div style="flex:1;width:100%;background:var(--indigo-soft);border-radius:1px 1px 0 0;height:80%;"></div>
+              <div style="font-size:3pt;color:var(--soft);">Abr</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+              <div style="font-size:3pt;color:var(--soft);">1680</div>
+              <div style="flex:1;width:100%;background:var(--indigo-soft);border-radius:1px 1px 0 0;height:100%;"></div>
+              <div style="font-size:3pt;color:var(--soft);">Mai</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
+              <div style="font-size:3pt;font-weight:700;color:var(--indigo);">1015</div>
+              <div style="flex:1;width:100%;background:var(--indigo);border-radius:1px 1px 0 0;height:64%;"></div>
+              <div style="font-size:3pt;font-weight:700;color:var(--indigo);">Jun</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="bullets">
+        <li>Gráfico de barras dos últimos 6 meses</li>
+        <li>3 métricas: receita atual, média, acumulado no ano</li>
+        <li>Tabela com locações pagas no mês</li>
+        <li>Exportação em Excel (2 abas: Receita Mensal + Detalhamento)</li>
+      </ul>
+    </div>
+
+    <div style="width:1px;background:var(--border);"></div>
+
+    <!-- Relatório Peças Fora -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:4mm;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="chip chip-indigo">Tela 12</span>
+        <span class="t-h3">Relatório: Peças Fora</span>
+        <span class="chip chip-warning">Admin</span>
+      </div>
+      <div class="t-body">Tabela de todas as peças atualmente fora do acervo — em uso por locatários.</div>
+      <ul class="bullets">
+        <li>Linhas vermelhas para peças com devolução atrasada</li>
+        <li>Filtro rápido "Ver só atrasadas" com contador</li>
+        <li>Clique na linha → tela de devolução de caução</li>
+        <li>Resumo: total fora vs. total atrasadas</li>
+        <li>Exportação em Excel</li>
+      </ul>
+
+      <!-- Mock tabela mini -->
+      <div class="mock" style="flex:1;">
+        <div class="mock-body" style="padding:5px;">
+          <div style="display:grid;grid-template-columns:2fr 1.5fr 1fr 1fr;gap:2px;margin-bottom:2px;">
+            <div style="background:var(--indigo);color:#fff;padding:2px 4px;border-radius:2px;font-size:4pt;font-weight:700;">Peça</div>
+            <div style="background:var(--indigo);color:#fff;padding:2px 4px;border-radius:2px;font-size:4pt;font-weight:700;">Locatário</div>
+            <div style="background:var(--indigo);color:#fff;padding:2px 4px;border-radius:2px;font-size:4pt;font-weight:700;">Saída</div>
+            <div style="background:var(--indigo);color:#fff;padding:2px 4px;border-radius:2px;font-size:4pt;font-weight:700;">Situação</div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 1.5fr 1fr 1fr;gap:2px;padding:2px 0;border-bottom:1px solid var(--border);">
+            <div style="font-size:4.5pt;">Capa Imperial Dourada</div>
+            <div style="font-size:4.5pt;color:var(--soft);">Cia. Pavilhão</div>
+            <div style="font-size:4.5pt;color:var(--soft);">09/06</div>
+            <div style="font-size:4pt;color:var(--success);font-weight:700;">No prazo</div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 1.5fr 1fr 1fr;gap:2px;padding:2px 0;background:#F2DCDC;border-radius:2px;">
+            <div style="font-size:4.5pt;color:#B53A3A;font-weight:700;">Capa Imperial Dourada</div>
+            <div style="font-size:4.5pt;color:#B53A3A;">Esc. Dança Lia</div>
+            <div style="font-size:4.5pt;color:#B53A3A;">15/05</div>
+            <div style="font-size:4pt;color:#B53A3A;font-weight:700;">⏰ 5 dias</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="s-page">09</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SLIDE 10 — FLUXO DE ESTADOS -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="slide slide-light">
+  <div class="s-head">
+    <div class="s-eyebrow" style="color:var(--soft)">Lógica do Sistema · Máquina de Estados</div>
+  </div>
+  <div class="s-body" style="flex-direction:column;gap:5mm;">
+
+    <div class="t-h2" style="color:var(--indigo);">Ciclo de vida de uma locação</div>
+    <div class="t-body" style="max-width:200mm;">
+      Cada locação percorre um caminho definido de estados. O sistema só permite transições válidas — isso garante que nenhuma peça saia sem pagamento confirmado e nenhuma caução seja devolvida sem decisão explícita.
+    </div>
+
+    <!-- Diagrama de estados -->
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10mm 12mm;margin:2mm 0;">
+      <!-- Linha principal -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:nowrap;margin-bottom:8mm;">
+        <div class="state-box" style="background:#E2DEEF;color:var(--indigo);border:1.5px solid var(--indigo);">Reservada</div>
+        <div class="state-arrow">→</div>
+        <div class="state-box" style="background:#F5ECCC;color:#B8860B;border:1.5px solid #B8860B;">Aguardando<br>pagamento</div>
+        <div class="state-arrow">→</div>
+        <div class="state-box" style="background:#E2DEEF;color:var(--indigo);border:1.5px solid var(--indigo);">Em uso</div>
+        <div class="state-arrow">→</div>
+        <div class="state-box" style="background:#DDEEE5;color:#2E7D5C;border:1.5px solid #2E7D5C;">Aguardando<br>decisão caução</div>
+        <div class="state-arrow">→</div>
+        <div class="state-box" style="background:var(--cream-dark);color:var(--soft);border:1.5px solid var(--border);">Finalizada</div>
+      </div>
+      <!-- Caminho alternativo -->
+      <div style="display:flex;justify-content:center;align-items:center;gap:0;">
+        <div style="width:52px;"></div>
+        <div style="width:40px;"></div>
+        <div style="width:60px;"></div>
+        <div style="flex:1;"></div>
+        <div style="display:flex;align-items:center;gap:0;">
+          <div style="font-size:8pt;color:var(--faint);margin-right:4px;">ou</div>
+          <div class="state-box" style="background:#F2DCDC;color:#B53A3A;border:1.5px solid #B53A3A;">Caução<br>retida</div>
+          <div class="state-arrow" style="color:var(--faint);">→</div>
+          <div class="state-box" style="background:var(--cream-dark);color:var(--soft);border:1.5px solid var(--border);">Finalizada</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quem faz o quê -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4mm;">
+      <div>
+        <div style="font-size:7.5pt;font-weight:700;color:var(--soft);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Reservada</div>
+        <div style="font-size:8.5pt;color:var(--text);">Figurinista inicia o wizard de locação</div>
+        <div style="font-size:7.5pt;color:var(--faint);margin-top:2px;">👗 Figurinista</div>
+      </div>
+      <div>
+        <div style="font-size:7.5pt;font-weight:700;color:var(--soft);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Aguardando pgt.</div>
+        <div style="font-size:8.5pt;color:var(--text);">Locação criada. Admin vê na fila de pagamentos</div>
+        <div style="font-size:7.5pt;color:var(--faint);margin-top:2px;">📋 Admin confirma</div>
+      </div>
+      <div>
+        <div style="font-size:7.5pt;font-weight:700;color:var(--soft);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Em uso</div>
+        <div style="font-size:8.5pt;color:var(--text);">Peças saíram. Locação aparece em "Peças fora"</div>
+        <div style="font-size:7.5pt;color:var(--faint);margin-top:2px;">👗 Figurinista confere</div>
+      </div>
+      <div>
+        <div style="font-size:7.5pt;font-weight:700;color:var(--soft);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Aguard. caução</div>
+        <div style="font-size:8.5pt;color:var(--text);">Figurinista registrou devolução com avaliação</div>
+        <div style="font-size:7.5pt;color:var(--faint);margin-top:2px;">📋 Admin decide</div>
+      </div>
+      <div>
+        <div style="font-size:7.5pt;font-weight:700;color:var(--soft);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Finalizada</div>
+        <div style="font-size:8.5pt;color:var(--text);">Caução devolvida ou retida. Ciclo encerrado.</div>
+        <div style="font-size:7.5pt;color:var(--faint);margin-top:2px;">✅ Concluído</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="s-page">10</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SLIDE 11 — REGRA DE OURO -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="slide slide-section">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10mm;padding:12mm 16mm;text-align:center;">
+
+    <div style="font-size:9pt;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);">
+      Regra de Negócio Crítica
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12mm;flex-wrap:wrap;justify-content:center;">
+      <div style="background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.25);border-radius:10px;padding:10mm 14mm;">
+        <div style="font-family:var(--serif);font-size:28pt;font-weight:600;color:#fff;line-height:1.1;">Aluguel</div>
+        <div style="font-size:9pt;color:rgba(255,255,255,0.65);margin-top:4px;">Receita do teatro</div>
+        <div style="font-size:8pt;color:rgba(255,255,255,0.4);margin-top:6px;">R$ 35,00 por peça · configurável</div>
+      </div>
+
+      <div style="font-family:var(--serif);font-size:52pt;color:rgba(255,255,255,0.25);line-height:1;">≠</div>
+
+      <div style="background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.25);border-radius:10px;padding:10mm 14mm;">
+        <div style="font-family:var(--serif);font-size:28pt;font-weight:600;color:#fff;line-height:1.1;">Caução</div>
+        <div style="font-size:9pt;color:rgba(255,255,255,0.65);margin-top:4px;">Depósito reembolsável</div>
+        <div style="font-size:8pt;color:rgba(255,255,255,0.4);margin-top:6px;">R$ 50,00 fixo · nunca é receita</div>
+      </div>
+    </div>
+
+    <div style="max-width:200mm;font-size:10pt;color:rgba(255,255,255,0.65);line-height:1.7;">
+      Esta separação é enforçada em <strong style="color:#fff;">todas</strong> as telas do sistema:<br>
+      formulários, confirmações, relatórios e exportações de Excel.<br>
+      O sistema nunca soma os dois valores nem os chama de "total a pagar".
+    </div>
+
+  </div>
+  <div class="s-page white">11</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SLIDE 12 — PRÓXIMOS PASSOS -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="slide slide-light">
+  <div class="s-head">
+    <div class="s-eyebrow" style="color:var(--soft)">Próximos passos · Fase 3 → Implementação</div>
+  </div>
+  <div class="s-body">
+    <div class="s-col">
+      <div class="t-h2" style="color:var(--indigo);margin-bottom:3mm;">O que aprovamos aqui?</div>
+
+      <div class="t-body" style="margin-bottom:4mm;">
+        Após revisar o protótipo, precisamos de feedback sobre 3 categorias:
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:3mm;">
+        <div class="info-box green">
+          <strong>✅ Layout e identidade visual</strong><br>
+          As cores, tipografia, espaçamentos e hierarquia de informação estão corretos?
+        </div>
+        <div class="info-box blue">
+          <strong>🔄 Fluxos e navegação</strong><br>
+          O caminho entre as telas faz sentido? Faltou alguma tela ou ação?
+        </div>
+        <div class="info-box amber">
+          <strong>📋 Regras de negócio</strong><br>
+          Os valores, os rótulos e o comportamento do sistema refletem como o TJA funciona?
+        </div>
+      </div>
+
+      <div class="divider" style="margin:4mm 0;"></div>
+
+      <div class="t-h3" style="margin-bottom:2mm;">Após aprovação</div>
+      <div style="display:flex;flex-direction:column;gap:2mm;">
+        <div class="flow-step">
+          <div class="step-n" style="font-size:7pt;">F3</div>
+          <div class="step-body">
+            <div class="step-title">Fase 3 — Blueprint técnico</div>
+            <div class="step-desc">Modelagem do banco de dados, APIs e módulos do Spring Boot.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-n" style="font-size:7pt;">F4</div>
+          <div class="step-body">
+            <div class="step-title">Fase 4 — Implementação</div>
+            <div class="step-desc">Backend Spring Boot + Postgres + frontend conectado ao banco real.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="step-n" style="font-size:7pt;">F5</div>
+          <div class="step-body">
+            <div class="step-title">Fase 5 — Homologação e deploy</div>
+            <div class="step-desc">Testes com dados reais do acervo. Deploy em produção no domínio do TJA.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="s-col-narrow">
+      <div class="t-h3" style="margin-bottom:3mm;">Mapa das 12 telas</div>
+      <table class="t-table" style="font-size:7.5pt;">
+        <thead><tr><th>#</th><th>Tela</th><th>Perfil</th></tr></thead>
+        <tbody>
+          <tr><td>01</td><td>Login</td><td>Ambos</td></tr>
+          <tr><td>02</td><td>Home da Figurinista</td><td>Figurinista</td></tr>
+          <tr><td>03</td><td>Home da Administração</td><td>Admin</td></tr>
+          <tr><td>04</td><td>Nova Locação</td><td>Figurinista</td></tr>
+          <tr><td>05</td><td>Pagamentos Pendentes</td><td>Admin</td></tr>
+          <tr><td>06</td><td>Registrar Devolução</td><td>Figurinista</td></tr>
+          <tr><td>07</td><td>Devolução de Caução</td><td>Admin</td></tr>
+          <tr><td>08</td><td>Acervo</td><td>Ambos</td></tr>
+          <tr><td>09</td><td>Cadastro de Peça</td><td>Ambos</td></tr>
+          <tr><td>10</td><td>Cadastro de Locatário</td><td>Ambos</td></tr>
+          <tr><td>11</td><td>Relatório: Receita</td><td>Admin</td></tr>
+          <tr><td>12</td><td>Relatório: Peças Fora</td><td>Admin</td></tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:4mm;background:var(--navy);border-radius:7px;padding:8px 10px;">
+        <div style="font-size:7.5pt;color:rgba(255,255,255,0.5);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:5px;">Acesso ao protótipo</div>
+        <div style="font-size:9pt;font-weight:700;color:#fff;margin-bottom:5px;">🔗 figurinos-tja-proto.vercel.app</div>
+        <div style="font-size:7.5pt;color:rgba(255,255,255,0.55);line-height:1.7;">
+          Usuário figurinista: <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">conceicao</code><br>
+          Usuário admin: <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">raimundo</code><br>
+          Senha: qualquer combinação
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="s-page">12</div>
+</div>
+
+</body>
+</html>

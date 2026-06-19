@@ -20,16 +20,16 @@ const LOCATARIOS = [
 
 // Peças do acervo
 const PECAS = [
-  { id: 'P1', nome: 'Vestido Belle Époque', categoria: 'Vestido', tamanho: 'M', cor: 'Marfim', material: 'Renda e cetim', estado: 'disponivel', conservacao: 'Bom', local: 'Arara A · Prateleira 2' },
-  { id: 'P2', nome: 'Casaca de Veludo Bordô', categoria: 'Casaco', tamanho: 'G', cor: 'Bordô', material: 'Veludo', estado: 'em_uso', conservacao: 'Ótimo', local: 'Arara C · Prateleira 1' },
-  { id: 'P3', nome: 'Capa Imperial Dourada', categoria: 'Capa', tamanho: 'Único', cor: 'Dourado', material: 'Brocado', estado: 'em_uso', conservacao: 'Bom', local: 'Arara C · Prateleira 1' },
-  { id: 'P4', nome: 'Saia de Cancan', categoria: 'Saia', tamanho: 'P', cor: 'Vermelho', material: 'Tule', estado: 'manutencao', conservacao: 'Regular', local: 'Costura · Banca 2' },
-  { id: 'P5', nome: 'Colete Vitoriano', categoria: 'Colete', tamanho: 'M', cor: 'Cinza-chumbo', material: 'Lã', estado: 'disponivel', conservacao: 'Bom', local: 'Arara B · Prateleira 3' },
-  { id: 'P6', nome: 'Vestido de Baile Esmeralda', categoria: 'Vestido', tamanho: 'G', cor: 'Verde', material: 'Seda', estado: 'disponivel', conservacao: 'Ótimo', local: 'Arara A · Prateleira 4' },
-  { id: 'P7', nome: 'Fraque Preto Clássico', categoria: 'Terno', tamanho: 'G', cor: 'Preto', material: 'Lã fria', estado: 'em_uso', conservacao: 'Bom', local: 'Arara D · Prateleira 1' },
-  { id: 'P8', nome: 'Chapéu Cartola', categoria: 'Acessório', tamanho: 'Único', cor: 'Preto', material: 'Feltro', estado: 'disponivel', conservacao: 'Bom', local: 'Acessórios · Gaveta 5' },
-  { id: 'P9', nome: 'Anágua Rendada', categoria: 'Roupa de baixo', tamanho: 'M', cor: 'Branco', material: 'Algodão e renda', estado: 'em_uso', conservacao: 'Regular', local: 'Arara B · Prateleira 1' },
-  { id: 'P10', nome: 'Túnica Grega', categoria: 'Túnica', tamanho: 'Único', cor: 'Marfim', material: 'Linho', estado: 'disponivel', conservacao: 'Bom', local: 'Arara E · Prateleira 2' },
+  { id: 'P1', nome: 'Vestido Belle Époque', categoria: 'Vestido', tamanho: 'M', cor: 'Marfim', material: 'Renda e cetim', estado: 'disponivel', conservacao: 'Bom', local: 'Arara A · Prateleira 2', foto: 'https://placehold.co/400x500/e8e0ce/5c4a2a?text=Vestido+Belle+Epoque' },
+  { id: 'P2', nome: 'Casaca de Veludo Bordô', categoria: 'Casaco', tamanho: 'G', cor: 'Bordô', material: 'Veludo', estado: 'em_uso', conservacao: 'Ótimo', local: 'Arara C · Prateleira 1', foto: 'https://placehold.co/400x500/7a1e2e/fce8ec?text=Casaca+de+Veludo+Bordo' },
+  { id: 'P3', nome: 'Capa Imperial Dourada', categoria: 'Capa', tamanho: 'Único', cor: 'Dourado', material: 'Brocado', estado: 'em_uso', conservacao: 'Bom', local: 'Arara C · Prateleira 1', foto: 'https://placehold.co/400x500/b8860b/fff8dc?text=Capa+Imperial+Dourada' },
+  { id: 'P4', nome: 'Saia de Cancan', categoria: 'Saia', tamanho: 'P', cor: 'Vermelho', material: 'Tule', estado: 'manutencao', conservacao: 'Regular', local: 'Costura · Banca 2', foto: 'https://placehold.co/400x500/c0392b/fef9f9?text=Saia+de+Cancan' },
+  { id: 'P5', nome: 'Colete Vitoriano', categoria: 'Colete', tamanho: 'M', cor: 'Cinza-chumbo', material: 'Lã', estado: 'disponivel', conservacao: 'Bom', local: 'Arara B · Prateleira 3', foto: 'https://placehold.co/400x500/5a6a7a/ecf0f4?text=Colete+Vitoriano' },
+  { id: 'P6', nome: 'Vestido de Baile Esmeralda', categoria: 'Vestido', tamanho: 'G', cor: 'Verde', material: 'Seda', estado: 'disponivel', conservacao: 'Ótimo', local: 'Arara A · Prateleira 4', foto: 'https://placehold.co/400x500/1a6b3c/e8f5ee?text=Vestido+de+Baile+Esmeralda' },
+  { id: 'P7', nome: 'Fraque Preto Clássico', categoria: 'Terno', tamanho: 'G', cor: 'Preto', material: 'Lã fria', estado: 'em_uso', conservacao: 'Bom', local: 'Arara D · Prateleira 1', foto: 'https://placehold.co/400x500/1a1a2e/e8e8f0?text=Fraque+Preto+Classico' },
+  { id: 'P8', nome: 'Chapéu Cartola', categoria: 'Acessório', tamanho: 'Único', cor: 'Preto', material: 'Feltro', estado: 'disponivel', conservacao: 'Bom', local: 'Acessórios · Gaveta 5', foto: 'https://placehold.co/400x500/2d2d2d/eeeeee?text=Chapeu+Cartola' },
+  { id: 'P9', nome: 'Anágua Rendada', categoria: 'Roupa de baixo', tamanho: 'M', cor: 'Branco', material: 'Algodão e renda', estado: 'em_uso', conservacao: 'Regular', local: 'Arara B · Prateleira 1', foto: 'https://placehold.co/400x500/f4f0ea/6a5a4a?text=Nagua+Rendada' },
+  { id: 'P10', nome: 'Túnica Grega', categoria: 'Túnica', tamanho: 'Único', cor: 'Marfim', material: 'Linho', estado: 'disponivel', conservacao: 'Bom', local: 'Arara E · Prateleira 2', foto: 'https://placehold.co/400x500/ede8d5/5a4a2a?text=Tunica+Grega' },
 ];
 
 // Locações (vinculam locatário + peças + estado da máquina)

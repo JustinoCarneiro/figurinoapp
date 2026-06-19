@@ -54,7 +54,7 @@ function LocacaoFooter({ locatario, pecasSel, step, onBack, onNext, loading }) {
   const canNext =
     (step === 1 && nPecas > 0) ||
     (step === 2 && !!locatario) ||
-    step === 3;
+    (step === 3 && !!dataDevol);
 
   return (
     <div style={{
@@ -191,15 +191,18 @@ function Passo1({ locatario, setLocatario, go }) {
   );
 }
 
-// ---------- Miniatura de peça (placeholder de foto) ----------
+// ---------- Miniatura de peça ----------
 function PecaThumb({ peca, size = 56 }) {
+  const [erro, setErro] = useState(false);
   return (
     <span style={{
       width: size, height: size, flex: 'none', borderRadius: 'var(--tja-radius-sm)',
       background: 'var(--tja-bg-muted)', display: 'grid', placeItems: 'center',
       color: 'var(--tja-text-faint)', overflow: 'hidden',
     }}>
-      <Icon name="hanger" size={Math.round(size * 0.42)} />
+      {peca.foto && !erro
+        ? <img src={peca.foto} alt={peca.nome} onError={() => setErro(true)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        : <Icon name="hanger" size={Math.round(size * 0.42)} />}
     </span>
   );
 }
