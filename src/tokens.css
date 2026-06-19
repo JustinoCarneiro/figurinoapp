@@ -1,0 +1,228 @@
+/* ============================================================
+   Sistema de Figurinos — Teatro José de Alencar
+   Identidade Visual · Direção A (Institucional Confiável)
+   Índigo + Grafite + Creme neutro · Source Serif 4 + Inter
+   ============================================================ */
+
+:root {
+  /* ---------- CORES ---------- */
+
+  /* Fundos (do mais claro ao mais escuro) */
+  --tja-bg:           #F5F4F0; /* creme neutro — fundo da aplicação */
+  --tja-bg-elevated:  #FFFFFF; /* superfícies elevadas — cards, modais */
+  --tja-bg-muted:     #E4E2D9; /* superfícies secundárias — listas zebradas */
+  --tja-bg-hover:     #EDEAE2; /* hover sutil sobre fundo creme */
+
+  /* Cor primária — índigo institucional */
+  --tja-primary:        #3A2D8F; /* CTAs, links, títulos importantes */
+  --tja-primary-hover:  #2E2270; /* hover de botões primários */
+  --tja-primary-soft:   #E2DEEF; /* fundos sutis com tom primário */
+
+  /* Acento — versão mais clara do índigo (sem cor quente; paleta unificada) */
+  --tja-accent:       #5C4BB8; /* destaques secundários, ícones de status especiais */
+  --tja-accent-soft:  #ECE8F7; /* fundo de badge acento */
+
+  /* Texto */
+  --tja-text:         #1A1A2E; /* texto principal — quase-preto azulado */
+  --tja-text-soft:    #4A4A5E; /* texto secundário — labels, metadados */
+  --tja-text-faint:   #8A8A9E; /* placeholder, texto desabilitado */
+  --tja-text-on-dark: #FFFFFF; /* texto branco sobre índigo/grafite */
+
+  /* Bordas */
+  --tja-border:       #DCD9D0; /* divisores e bordas padrão */
+  --tja-border-soft:  #E8E5DD; /* divisores sutis */
+  --tja-border-focus: #3A2D8F; /* anel de foco nos inputs */
+
+  /* Estados semânticos */
+  --tja-success:      #2E7D5C; /* verde funcional (peça disponível, devolvida ok) */
+  --tja-success-soft: #DDEEE5;
+  --tja-warning:      #B8860B; /* âmbar profissional (atraso, atenção) */
+  --tja-warning-soft: #F5ECCC;
+  --tja-danger:       #B53A3A; /* vermelho institucional (erro, caução retida) */
+  --tja-danger-soft:  #F2DCDC;
+  --tja-info:         #4A5A7A; /* azul-grafite (informação neutra) */
+  --tja-info-soft:    #DDE2EC;
+
+  /* ---------- TIPOGRAFIA ---------- */
+
+  --tja-font-display: 'Source Serif 4', Georgia, serif;
+  --tja-font-body:    'Inter', system-ui, -apple-system, sans-serif;
+  --tja-font-mono:    ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Escala */
+  --tja-text-xs:   12px;  /* labels, metadados */
+  --tja-text-sm:   13px;  /* texto auxiliar */
+  --tja-text-base: 15px;  /* corpo padrão — generoso pra figurinista */
+  --tja-text-lg:   17px;  /* corpo destacado */
+  --tja-text-xl:   20px;  /* títulos de card */
+  --tja-text-2xl:  26px;  /* títulos de seção */
+  --tja-text-3xl:  34px;  /* títulos de tela */
+  --tja-text-4xl:  44px;  /* título de boas-vindas / login */
+
+  /* Pesos (Inter tem range completo) */
+  --tja-weight-regular: 400;
+  --tja-weight-medium:  500;
+  --tja-weight-semibold: 600;
+  --tja-weight-bold:    700;
+
+  /* Altura de linha */
+  --tja-leading-tight: 1.2;  /* títulos serifados */
+  --tja-leading-snug:  1.4;  /* subtítulos */
+  --tja-leading-base:  1.55; /* corpo */
+  --tja-leading-loose: 1.7;  /* textos longos */
+
+  /* ---------- LAYOUT ---------- */
+
+  /* Espaçamentos (escala 4px) */
+  --tja-space-1:  4px;
+  --tja-space-2:  8px;
+  --tja-space-3:  12px;
+  --tja-space-4:  16px;
+  --tja-space-5:  24px;
+  --tja-space-6:  32px;
+  --tja-space-7:  48px;
+  --tja-space-8:  64px;
+
+  /* Raios de canto — mais contidos do que na Direção B (institucional pede menos curvatura) */
+  --tja-radius-sm:   4px;  /* badges pequenos, tags */
+  --tja-radius-md:   6px;  /* inputs, botões */
+  --tja-radius-lg:   10px; /* cards */
+  --tja-radius-xl:   14px; /* containers maiores, modais */
+  --tja-radius-pill: 999px;/* pílulas, status badges */
+
+  /* Áreas de toque mínimas */
+  --tja-tap-min: 44px;
+
+  /* Larguras */
+  --tja-max-content: 1280px;
+  --tja-max-prose:   720px;
+
+  /* Sombras — discretas, sempre cor da marca diluída */
+  --tja-shadow-sm:    0 1px 2px rgba(26, 26, 46, 0.06);
+  --tja-shadow-md:    0 4px 12px rgba(26, 26, 46, 0.08);
+  --tja-shadow-lg:    0 12px 28px rgba(26, 26, 46, 0.12);
+  --tja-shadow-focus: 0 0 0 3px rgba(58, 45, 143, 0.22);
+
+  /* Transições — sutis */
+  --tja-ease:       cubic-bezier(0.2, 0.7, 0.2, 1);
+  --tja-duration:   160ms;
+}
+
+/* ============================================================
+   RESET E BASE
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--tja-bg);
+  color: var(--tja-text);
+  font-family: var(--tja-font-body);
+  font-size: var(--tja-text-base);
+  line-height: var(--tja-leading-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--tja-font-display);
+  font-weight: 600;
+  line-height: var(--tja-leading-tight);
+  letter-spacing: -0.01em;
+  color: var(--tja-text);
+  margin: 0 0 var(--tja-space-3);
+}
+
+h1 { font-size: var(--tja-text-3xl); }
+h2 { font-size: var(--tja-text-2xl); }
+h3 { font-size: var(--tja-text-xl); }
+
+a {
+  color: var(--tja-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+a:hover { color: var(--tja-primary-hover); }
+
+/* ============================================================
+   COMPONENTES BASE
+   ============================================================ */
+
+/* Botão primário */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tja-tap-min);
+  padding: 0 var(--tja-space-5);
+  border-radius: var(--tja-radius-md);
+  font-family: var(--tja-font-body);
+  font-size: var(--tja-text-base);
+  font-weight: var(--tja-weight-semibold);
+  border: none;
+  cursor: pointer;
+  transition: background var(--tja-duration) var(--tja-ease),
+              transform var(--tja-duration) var(--tja-ease);
+}
+.btn-primary {
+  background: var(--tja-primary);
+  color: var(--tja-text-on-dark);
+}
+.btn-primary:hover  { background: var(--tja-primary-hover); }
+.btn-primary:active { transform: translateY(1px); }
+.btn-secondary {
+  background: transparent;
+  color: var(--tja-primary);
+  border: 1px solid var(--tja-primary);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--tja-text);
+}
+.btn:focus-visible { outline: none; box-shadow: var(--tja-shadow-focus); }
+
+/* Card */
+.card {
+  background: var(--tja-bg-elevated);
+  border: 1px solid var(--tja-border);
+  border-radius: var(--tja-radius-lg);
+  padding: var(--tja-space-5);
+  box-shadow: var(--tja-shadow-sm);
+}
+
+/* Inputs */
+.input, .select, .textarea {
+  width: 100%;
+  min-height: var(--tja-tap-min);
+  padding: 0 var(--tja-space-4);
+  background: var(--tja-bg-elevated);
+  border: 1px solid var(--tja-border);
+  border-radius: var(--tja-radius-md);
+  font-family: var(--tja-font-body);
+  font-size: var(--tja-text-base);
+  color: var(--tja-text);
+}
+.input:focus, .select:focus, .textarea:focus {
+  outline: none;
+  border-color: var(--tja-border-focus);
+  box-shadow: var(--tja-shadow-focus);
+}
+
+/* Status badges — refletem a máquina de estados da locação */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tja-space-2);
+  padding: var(--tja-space-1) var(--tja-space-3);
+  border-radius: var(--tja-radius-pill);
+  font-size: var(--tja-text-xs);
+  font-weight: var(--tja-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.badge-disponivel       { background: var(--tja-success-soft); color: var(--tja-success); }
+.badge-em-uso           { background: var(--tja-primary-soft); color: var(--tja-primary); }
+.badge-aguardando-pgto  { background: var(--tja-warning-soft); color: var(--tja-warning); }
+.badge-atrasada         { background: var(--tja-danger-soft);  color: var(--tja-danger); }
+.badge-manutencao       { background: var(--tja-accent-soft);  color: var(--tja-accent); }
+.badge-finalizada       { background: var(--tja-border-soft);  color: var(--tja-text-soft); }
