@@ -65,7 +65,7 @@ function Login({ onLogin }) {
 
         {/* Rodapé */}
         <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.35)', lineHeight: 1.6 }}>
-          Fortaleza · Ceará · SECULT-CE
+          Fortaleza · Ceará
         </div>
       </aside>
 
