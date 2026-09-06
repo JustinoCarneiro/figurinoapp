@@ -1,3 +1,5 @@
+@AGENTS.md
+
 # Sistema de Gestão de Figurinos — Teatro José de Alencar (MVP)
 
 Sistema web multiusuário para gerenciar acervo, locações e caução do figurino do TJA (Fortaleza/CE). **Escopo MVP** — fluxo central de ponta a ponta, pronto pra entrar em produção em ~3-4 semanas.
